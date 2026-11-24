@@ -85,7 +85,12 @@
   .m .v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
   .m canvas{width:100%;height:42px;display:block;margin-top:4px}
   .m .d{font-size:12px;color:var(--muted)}
-  .ci{display:none;border-color:#6cc8ff66}
+  .cimodal{position:fixed;inset:0;background:#030c0ecc;backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;z-index:9;padding:12px}
+  .cimodal.on{display:flex}
+  .cimodal .ci{width:100%;max-width:560px;max-height:92vh;overflow:auto;animation:up .25s ease-out}
+  @keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+  @media(prefers-reduced-motion:reduce){.cimodal .ci{animation:none}}
+  .ci{border-color:#6cc8ff66}
   .ci.on{display:block}
   .q{margin:14px 0}
   .q label,.q .ql{display:block;font-weight:600;font-size:14px;margin-bottom:8px}
@@ -189,7 +194,7 @@
       </div>
 
       <div class="stack">
-        <div class="card ci" id="ciCard">
+        <div class="cimodal" id="ciModal" role="dialog" aria-modal="true" aria-label="Kısa check-in"><div class="card ci" id="ciCard">
           <h2>Kısa check-in ✍️ <span class="muted small" style="font-weight:500">10 saniye</span></h2>
           <div class="q"><label for="ciSleep">😴 Kaç saat uyudun? <b id="ciSleepV">7</b> saat</label>
             <input type="range" id="ciSleep" min="3" max="12" step="0.5" value="7"></div>
@@ -202,7 +207,7 @@
           <div class="q"><span class="ql">🍽️ Dün akşam… <span class="muted small" style="font-weight:500">(uyanları seç, hiçbiri de olabilir)</span></span>
             <div class="tags" id="ciTags"></div></div>
           <div class="row"><button class="btn main" id="ciSave">Kaydet</button><button class="btn ghost" id="ciSkip">Bugün atla</button></div>
-        </div>
+        </div></div>
 
         <div class="card">
           <div class="score">
@@ -786,17 +791,18 @@ $("ciSleep").oninput = e => { $("ciSleepV").textContent = e.target.value; };
 function openCheckin(id){
   ciTarget = id; ciState.sleepQ = null; ciState.stress = null; ciState.tags.clear();
   for (const el of [$("ciQ"), $("ciS"), $("ciTags")]) for (const x of el.children) x.classList.remove("on");
-  $("ciCard").classList.add("on"); $("ciOpenRow").style.display = "none";
-  $("ciCard").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  $("ciModal").classList.add("on"); $("ciOpenRow").style.display = "none";
+  $("ciCard").scrollTop = 0;
 }
-function closeCheckin(){ $("ciCard").classList.remove("on"); ciTarget = null; }
+function closeCheckin(){ $("ciModal").classList.remove("on"); ciTarget = null; }
 $("ciSave").onclick = () => {
   if (!ciState.sleepQ || !ciState.stress){ $("ciSave").textContent = "Uyku ve gerginliği seç"; setTimeout(() => { $("ciSave").textContent = "Kaydet"; }, 1800); return; }
   const all = loadAll(), r = all.find(x => x.id === ciTarget);
   if (r){ r.checkin = { sleepH: +$("ciSleep").value, sleepQ: ciState.sleepQ, stress: ciState.stress, tags: [...ciState.tags], at: new Date().toISOString() }; r.tip = null; saveAll(all); }
-  closeCheckin(); renderAll();
+  closeCheckin(); renderAll(); showResult();
 };
-$("ciSkip").onclick = () => { closeCheckin(); renderAll(); };
+$("ciSkip").onclick = () => { closeCheckin(); renderAll(); showResult(); };
+function showResult(){ if (innerWidth < 900) document.querySelector(".score").closest(".card").scrollIntoView({ block: "start" }); }
 $("ciOpen").onclick = () => { const all = loadAll().sort((a, b) => a.ts.localeCompare(b.ts)); if (all.length) openCheckin(all[all.length-1].id); };
 
 function ensureTip(r, a, A, all){
@@ -836,7 +842,7 @@ function renderAll(){
     $("tip").innerHTML = "💡 " + esc(tip.text) + (cause ? `<div class="why">${esc(causeText(cause, A.triggers))}</div>` : "");
     const tr = trendFor(last, A);
     $("trend").textContent = tr ? tr.text : "";
-    $("ciOpenRow").style.display = !last.checkin && !$("ciCard").classList.contains("on") ? "flex" : "none";
+    $("ciOpenRow").style.display = !last.checkin && !$("ciModal").classList.contains("on") ? "flex" : "none";
   } else {
     $("lvl").textContent = "Henüz ölçüm yok"; $("lvl").style.color = ""; $("pills").innerHTML = ""; $("trend").textContent = "";
     $("gaugeVal").textContent = "–"; $("gaugeSub").textContent = "normaline göre"; $("gaugeFg").style.strokeDashoffset = 263.9;
