@@ -188,6 +188,7 @@
         <div class="status" id="status">Model yükleniyor…</div>
         <div class="row" style="justify-content:center;margin-top:0">
           <button class="btn" id="startBtn" disabled>Kamerayı aç</button>
+          <button class="btn" id="stopBtn" style="display:none">Kamerayı kapat</button>
           <button class="btn main" id="measureBtn" disabled>Ölç</button>
         </div>
         <div class="metrics" id="metrics"></div>
@@ -288,7 +289,7 @@
           <div class="ex"><b><i class="dot" style="background:var(--sky)"></i>Gözler arası mesafe</b><span class="small muted">Dış göz köşeleri (MediaPipe nokta 33 ↔ 263). Kemiğe bağlı, şişmeden az etkilenir. Diğer mesafeler buna bölünür, böylece kameraya uzaklık sonucu değiştirmez.</span></div>
           <div class="ex"><b><i class="dot" style="background:var(--mint)"></i>Yüz genişliği oranı</b><span class="small muted">Elmacık hizası (234 ↔ 454) ÷ gözler arası. Şişkinlikte artması beklenir.</span></div>
           <div class="ex"><b><i class="dot" style="background:var(--sand)"></i>Çene genişliği oranı</b><span class="small muted">Alt çene (172 ↔ 397) ÷ gözler arası. Şişkinlikte artması beklenir.</span></div>
-          <div class="ex"><b><i class="dot" style="background:var(--coral)"></i>Göz açıklığı oranı</b><span class="small muted">Göz kapakları arası ÷ göz genişliği. Göz kapağı şişince ya da uykusuzlukta azalır.</span></div>
+          <div class="ex"><b><i class="dot" style="background:var(--coral)"></i>Göz açıklığı oranı</b><span class="small muted">Göz kapakları arası ÷ göz genişliği. Göz kapağı şişince azalması beklenir. Tek başına bir yorgunluk ölçüsü değildir.</span></div>
         </div>
       </div>
       <div class="card">
@@ -318,8 +319,8 @@ Etkili ✓  ⇔  n₁ ≥ 3,  n₂ ≥ 3  ve  etki &gt; 2·SH   (≈ %95 güven)
       <div class="card">
         <h2>Bilimsel dayanak</h2>
         <ul class="src small">
-          <li><b>Uykusuzluk yüzde görülebilir.</b> Uykusuz bırakılan kişilerin yüzleri daha şiş gözlü, sarkık göz kapaklı ve koyu göz altlı olarak değerlendirilmiş. <span class="badge b-ok">kanıtlı</span><br>
-            <a href="https://pubmed.ncbi.nlm.nih.gov/23997369/">Sundelin ve ark., Sleep 2013: Cues of fatigue</a> · <a href="https://research-portal.st-andrews.ac.uk/en/publications/the-effect-of-sleep-deprivation-on-objective-and-subjective-measu/">Holding ve ark., J Sleep Res 2019: objektif ölçümler (n=181)</a></li>
+          <li><b>Yorgunluk yüzde "algılanıyor", ama objektif ölçümü zor.</b> İnsanlar uykusuz bırakılan kişilerin yüzlerini daha şiş gözlü ve sarkık göz kapaklı olarak değerlendirmiş. Ancak 181 kişilik bir çalışmada tek gecelik uykusuzluk, objektif olarak ölçülen göz açıklığı, göz altı koyuluğu ve cilt rengini değiştirmemiş. Bu yüzden yüz görünüşünü bir yorgunluk ölçüsü olarak sunmuyoruz. <span class="badge b-wip">sınırlı</span><br>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/23997369/">Sundelin ve ark., Sleep 2013: algılanan yorgunluk</a> · <a href="https://research-portal.st-andrews.ac.uk/en/publications/the-effect-of-sleep-deprivation-on-objective-and-subjective-measu/">Holding ve ark., J Sleep Res 2019: objektif ölçümlerde etki bulunamadı (n=181)</a></li>
           <li><b>Parmak ucu kamera ölçümü (planlanan stres modülü).</b> Telefon kamerasıyla parmak ucundan ölçülen nabız EKG ile çok yüksek uyum gösteriyor, yüzden ölçüm ise daha az doğru. <span class="badge b-ok">kanıtlı</span><br>
             <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5368348/">Yan ve ark., JMIR mHealth 2017: fingertip vs facial PPG</a></li>
           <li><b>Tuzun yüz oranlarına etkisi.</b> Tuzlu beslenmenin ertesi sabah yüz oranlarında ölçülebilir bir değişim yaratıp yaratmadığını doğrudan test eden bir çalışma bulamadık. Pilot deneyimiz bunu test ediyor. <span class="badge b-wip">test ediliyor</span></li>
@@ -583,7 +584,7 @@ function causeText(cause, triggers){
   if (!cause) return "";
   const L = FACTORS[cause.f].label.toLowerCase();
   if (cause.proven) return `Senin verilerinde ${L} olan sabahlarda şişkinlik skoru ortalama +${triggers[cause.f].effect} daha yüksek çıkıyor (etkisi gösterildi ✓).`;
-  if (cause.f === "shortSleep") return "Normalinden az uyuduğunu belirttin. Az uyku göz çevresinde şişkinlikle ilişkilendirilmiş.";
+  if (cause.f === "shortSleep") return "Normalinden az uyuduğunu belirttin. Bunun senin üzerindeki etkisi henüz yeterli veriyle gösterilmedi.";
   return `Dün akşam için "${FACTORS[cause.f].tag}" dedin. Bunun senin üzerindeki etkisi henüz yeterli veriyle gösterilmedi.`;
 }
 
@@ -769,7 +770,7 @@ async function measure(){
     schemaVersion: SCHEMA_VERSION, participant: demoMode ? "ÖRNEK" : (getConsent()?.code || null), metrics,
     conditions: { hour: now.getHours(), brightness: lightLevel, validFrames: n, totalFrames: total }, quality, checkin: null, tip: null };
   const all = loadAll(); all.push(rec); saveAll(all);
-  setStatus(`Kaydedildi ✓ · ${n} temiz kare kullanıldı`);
+  stopCamera(`Kaydedildi ✓ · ${n} temiz kare kullanıldı · kamera kapatıldı`);
   openCheckin(rec.id);
   renderAll();
 }
@@ -942,10 +943,25 @@ $("startBtn").onclick = async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video:{ width:640, height:480, facingMode:"user" } });
     video.srcObject = stream; await video.play();
-    $("hint").style.display = "none"; running = true; $("startBtn").style.display = "none";
+    $("hint").style.display = "none"; running = true; lastVideoTime = -1;
+    $("startBtn").style.display = "none"; $("stopBtn").style.display = "inline-block";
     setStatus("Tüm kutular yeşil olunca 'Ölç'e bas"); loop();
   } catch (e) { setStatus("Kamera açılamadı: " + e.message); }
 };
+function stopCamera(msg){
+  if (!running && !video.srcObject) return;
+  running = false;
+  const s = video.srcObject; if (s) for (const t of s.getTracks()) t.stop();
+  video.srcObject = null; lastFrame = null;
+  octx.clearRect(0, 0, overlay.width, overlay.height);
+  for (const k in liveBuf) liveBuf[k].length = 0;
+  $("hint").style.display = "grid"; $("hint").innerHTML = "Kamera kapalı.<br>Yeni ölçüm için tekrar aç.";
+  $("startBtn").style.display = "inline-block"; $("stopBtn").style.display = "none"; $("measureBtn").disabled = true;
+  renderChips(checks(null, null)); renderMetrics(null);
+  if (msg) setStatus(msg);
+}
+$("stopBtn").onclick = () => stopCamera("Kamera kapatıldı.");
+document.addEventListener("visibilitychange", () => { if (document.hidden && !measuring) stopCamera("Uygulama arka plana alındığı için kamera kapatıldı."); });
 $("measureBtn").onclick = measure;
 const dataMsg = t => { $("dataMsg").textContent = t; setTimeout(() => { $("dataMsg").textContent = ""; }, 4000); };
 $("exportBtn").onclick = () => {
