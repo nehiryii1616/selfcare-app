@@ -4,113 +4,148 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Self-care · Prototip</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0a1d22">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Self-care">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0a1d22; --bg2:#0f2a31; --card:#133640; --line:#1f4a55;
     --ink:#ecf6f4; --muted:#93b5b2;
-    --mint:#5be3b0; --sand:#ffd27a; --coral:#ff7a6b; --sky:#6cc8ff;
+    --mint:#5be3b0; --sand:#ffd27a; --coral:#ff7a6b; --sky:#6cc8ff; --lilac:#c3a6ff;
   }
   *{box-sizing:border-box;min-width:0}
   body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#174450 0,transparent 60%),var(--bg);color:var(--ink);
        font:16px/1.55 "Plus Jakarta Sans",system-ui,Segoe UI,sans-serif;min-height:100vh}
-  /* ---------- üst bar ---------- */
-  .top{display:flex;align-items:center;gap:18px;padding:16px max(4vw,16px);flex-wrap:wrap}
+  .top{display:flex;align-items:center;gap:14px 18px;padding:14px max(4vw,16px);flex-wrap:wrap}
   .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;margin-right:auto}
-  .logo i{width:30px;height:30px;border-radius:50%;background:conic-gradient(var(--mint),var(--sky),var(--sand),var(--mint));
-          box-shadow:0 0 20px #5be3b066}
-  .tabs{display:flex;gap:6px;background:var(--bg2);padding:5px;border-radius:14px}
-  .tabs button{background:none;color:var(--muted);padding:9px 16px;border-radius:10px;font-weight:600}
+  .logo i{width:30px;height:30px;border-radius:50%;background:conic-gradient(var(--mint),var(--sky),var(--sand),var(--mint));box-shadow:0 0 20px #5be3b066}
+  .who{font-size:13px;color:var(--muted);font-weight:600}
+  .tabs{display:flex;gap:4px;background:var(--bg2);padding:5px;border-radius:14px;overflow-x:auto;max-width:100%}
+  .tabs button{background:none;color:var(--muted);padding:8px 14px;border-radius:10px;font-weight:600;flex:none}
   .tabs button.on{background:var(--card);color:var(--ink)}
-  /* ---------- genel ---------- */
   button{font:inherit;border:0;cursor:pointer;color:var(--ink);min-height:44px}
-  button:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
-  .btn{background:var(--card);border-radius:12px;padding:10px 18px;font-weight:600}
-  .btn.main{background:var(--mint);color:#04261b;padding:14px 28px;font-size:17px;border-radius:999px;box-shadow:0 8px 30px #5be3b044}
+  button:focus-visible,input:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+  .btn{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 18px;font-weight:600}
+  .btn.main{background:var(--mint);color:#04261b;border:0;padding:14px 28px;font-size:17px;border-radius:999px;box-shadow:0 8px 30px #5be3b044}
+  .btn.ghost{background:none}
   .btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
   .wrap{max-width:1240px;margin:auto;padding:8px max(4vw,16px) 40px}
   .view{display:none}.view.on{display:block}
   .card{background:linear-gradient(180deg,var(--card),#112f38);border:1px solid var(--line);border-radius:22px;padding:20px}
+  .stack{display:grid;gap:18px}
   h2{font-size:18px;margin:0 0 12px}
   h3{font-size:15px;margin:0 0 6px;color:var(--muted);font-weight:600}
-  .muted{color:var(--muted)}
-  .small{font-size:13px}
-  /* ---------- ölçüm ekranı ---------- */
-  .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}
+  .muted{color:var(--muted)} .small{font-size:13px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
+  .demo{display:none;background:#2a1f45;border:1px solid #c3a6ff55;color:var(--lilac);border-radius:14px;padding:10px 14px;margin-bottom:16px;font-size:14px;align-items:center;gap:12px;flex-wrap:wrap}
+  .demo.on{display:flex}
+  .demo .btn{min-height:36px;padding:6px 14px}
+  .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
   @media(max-width:900px){.grid{grid-template-columns:1fr}}
-  .mirrorBox{display:flex;flex-direction:column;align-items:center;gap:16px}
-  .mirror{position:relative;width:min(420px,86vw);aspect-ratio:1}
-  .mirror .face{position:absolute;inset:16px;border-radius:50%;overflow:hidden;background:#061418;
-                box-shadow:inset 0 0 0 2px #ffffff14,0 20px 60px #0008}
+  .mirrorBox{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .mirror{position:relative;width:min(400px,84vw);aspect-ratio:1}
+  .mirror .face{position:absolute;inset:16px;border-radius:50%;overflow:hidden;background:#061418;box-shadow:inset 0 0 0 2px #ffffff14,0 20px 60px #0008}
   .mirror video,.mirror canvas.ov{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
   .mirror svg.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
   .mirror .hint{position:absolute;inset:16px;border-radius:50%;display:grid;place-items:center;text-align:center;padding:40px;color:var(--muted)}
-  .scan{position:absolute;left:16px;right:16px;height:3px;top:50%;background:linear-gradient(90deg,transparent,var(--mint),transparent);
-        opacity:0;border-radius:3px}
+  .scan{position:absolute;left:16px;right:16px;height:3px;top:50%;background:linear-gradient(90deg,transparent,var(--mint),transparent);opacity:0;border-radius:3px}
   .measuring .scan{opacity:1;animation:scan 1.2s ease-in-out infinite alternate}
   @keyframes scan{from{top:18%}to{top:82%}}
   @media(prefers-reduced-motion:reduce){.measuring .scan{animation:none}}
   .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
   .chip{padding:6px 12px;border-radius:999px;font-size:13px;font-weight:600;background:#0c252b;color:var(--muted);border:1px solid var(--line)}
-  .chip.ok{color:var(--mint);border-color:#5be3b055}
-  .chip.bad{color:var(--coral);border-color:#ff7a6b55}
+  .chip.ok{color:var(--mint);border-color:#5be3b055} .chip.bad{color:var(--coral);border-color:#ff7a6b55}
   .status{font-size:14px;color:var(--muted);text-align:center;min-height:22px}
-  /* skor */
-  .score{display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;align-items:center}
-  @media(max-width:480px){.score{grid-template-columns:1fr;justify-items:center;text-align:center}}
-  .gauge{position:relative;width:150px;height:150px}
+  .score{display:grid;grid-template-columns:140px minmax(0,1fr);gap:18px;align-items:center}
+  @media(max-width:480px){.score{grid-template-columns:1fr;justify-items:center;text-align:center}.pills{justify-content:center}}
+  .gauge{position:relative;width:140px;height:140px}
   .gauge svg{width:100%;height:100%;transform:rotate(-90deg)}
   .gauge .val{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
-  .gauge .val b{font-size:32px;line-height:1;display:block}
+  .gauge .val b{font-size:28px;line-height:1;display:block;white-space:nowrap}
   .gauge .val span{font-size:12px;color:var(--muted)}
   .lvl{font-size:24px;font-weight:800;line-height:1.15;margin:0 0 4px}
-  .tip{margin-top:12px;padding:12px 14px;border-radius:14px;background:#0b242a;border:1px solid var(--line)}
-  /* canlı metrikler */
-  .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
-  @media(max-width:560px){.metrics{grid-template-columns:1fr}}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .pill{font-size:13px;font-weight:600;padding:5px 11px;border-radius:999px;background:#0c252b;border:1px solid var(--line)}
+  .tip{margin-top:14px;padding:13px 15px;border-radius:14px;background:#0b242a;border:1px solid var(--line)}
+  .tip .why{font-size:13px;color:var(--muted);margin-top:6px}
+  .trend{margin-top:10px;font-size:14px;font-weight:600}
+  .trend:empty{display:none}
+  .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%}
+  @media(max-width:560px){.metrics{gap:8px}.m{padding:8px}.m .k{font-size:11px}.m .k i{display:none}.m .v{font-size:16px}.m canvas{height:30px}.m .d{font-size:11px}}
   .m{background:#0c252b;border:1px solid var(--line);border-radius:16px;padding:12px}
   .m .k{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);font-weight:600}
-  .m .k i{width:10px;height:10px;border-radius:50%}
+  .m .k i,.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
   .m .v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
   .m canvas{width:100%;height:42px;display:block;margin-top:4px}
   .m .d{font-size:12px;color:var(--muted)}
-  /* ---------- geçmiş ---------- */
-  .chart{position:relative;height:260px}
+  .ci{display:none;border-color:#6cc8ff66}
+  .ci.on{display:block}
+  .q{margin:14px 0}
+  .q label,.q .ql{display:block;font-weight:600;font-size:14px;margin-bottom:8px}
+  .scale{display:flex;gap:6px}
+  .scale button{flex:1;background:#0c252b;border:1px solid var(--line);border-radius:12px;font-size:22px;padding:6px 0}
+  .scale button.on{background:#6cc8ff22;border-color:var(--sky)}
+  .scale-l{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
+  input[type=range]{width:100%;accent-color:var(--sky);height:30px}
+  .tags{display:flex;gap:8px;flex-wrap:wrap}
+  .tags button{background:#0c252b;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--muted)}
+  .tags button.on{background:#ffd27a22;border-color:var(--sand);color:var(--sand)}
+  .chart{position:relative;height:240px}
+  .chart.s{height:150px}
   .chart canvas{position:absolute;inset:0;width:100%;height:100%}
-  .days{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:16px}
+  .days{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
   .day{background:#0c252b;border:1px solid var(--line);border-radius:16px;padding:12px;border-left:5px solid var(--mint)}
   .day.mid{border-left-color:var(--sand)}.day.high{border-left-color:var(--coral)}.day.baseline{border-left-color:var(--sky)}
   .day b{display:block}
+  .trig{display:grid;gap:12px}
+  .tr{display:grid;grid-template-columns:120px minmax(0,1fr) 70px;gap:12px;align-items:center;font-size:14px}
+  @media(max-width:560px){.tr{grid-template-columns:90px minmax(0,1fr) 58px}}
+  .tr .bar{height:12px;background:#0c252b;border-radius:6px;position:relative;overflow:hidden;border:1px solid var(--line)}
+  .tr .bar i{position:absolute;top:0;bottom:0}
+  .tr .st{font-size:12px;text-align:right;font-weight:700}
   .progress{display:flex;gap:6px;margin:8px 0 4px}
   .progress i{flex:1;height:8px;border-radius:4px;background:#0c252b;border:1px solid var(--line)}
   .progress i.f{background:var(--sky);border-color:var(--sky)}
-  /* ---------- veriler ---------- */
-  .explain{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:18px}
+  .explain{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
   .ex{background:#0c252b;border:1px solid var(--line);border-radius:16px;padding:14px}
-  .ex b{display:flex;align-items:center;gap:8px}
-  .ex b i{width:12px;height:12px;border-radius:50%}
+  .ex b{display:flex;align-items:center;gap:8px;margin-bottom:4px}
   .scroll{overflow-x:auto}
   table{border-collapse:collapse;width:100%;font-size:14px}
   th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
   th:first-child,td:first-child{text-align:left}
   th{color:var(--muted);font-weight:600;font-size:13px}
   pre{background:#061418;border:1px solid var(--line);border-radius:14px;padding:14px;overflow:auto;font-size:13px;max-height:340px;margin:0}
-  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .formula{background:#061418;border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-family:ui-monospace,Consolas,monospace;font-size:14px;line-height:1.7;overflow-x:auto;white-space:pre}
+  @media(max-width:560px){.formula{font-size:11.5px;padding:12px}}
+  .src li{margin:10px 0}
+  .src a{color:var(--sky)}
+  .badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;margin-left:6px;vertical-align:middle}
+  .b-ok{background:#5be3b022;color:var(--mint)} .b-wip{background:#ffd27a22;color:var(--sand)}
   .warn{font-size:13px;color:var(--muted);margin-top:22px;text-align:center}
-  /* ---------- onay ekranı ---------- */
+  .warn a{color:var(--muted)}
   .modal{position:fixed;inset:0;background:#030c0ecc;backdrop-filter:blur(6px);display:none;place-items:center;padding:16px;z-index:10;overflow:auto}
   .modal.on{display:grid}
   .sheet{background:var(--bg2);border:1px solid var(--line);border-radius:24px;max-width:620px;width:100%;padding:24px;max-height:94vh;overflow:auto}
-  .sheet h2{font-size:22px}
-  .sheet ul{padding-left:20px;margin:8px 0}
-  .sheet li{margin:4px 0}
+  .sheet h2{font-size:22px} .sheet ul{padding-left:20px;margin:8px 0} .sheet li{margin:4px 0}
   .alertbox{background:#2a2410;border:1px solid #ffd27a55;color:var(--sand);border-radius:14px;padding:12px 14px;margin:12px 0;font-size:14px}
   .field{display:block;margin:14px 0}
   .field input[type=text]{display:block;width:100%;margin-top:6px;font:inherit;font-size:16px;padding:12px;border-radius:12px;border:1px solid var(--line);background:#061418;color:var(--ink)}
   .check{display:flex;gap:10px;align-items:flex-start;margin:10px 0;font-size:14px;cursor:pointer}
   .check input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--mint)}
-  .who{font-size:13px;color:var(--muted);margin-left:auto}
+  .install{background:#0d2f2a;border:1px solid #5be3b055;border-radius:14px;padding:12px 14px;margin:12px 0;font-size:14px}
+  .install b.t{color:var(--mint);display:block;margin-bottom:4px}
+  .install ol{margin:6px 0 0;padding-left:20px}
+  .install li{margin:3px 0}
+  .install .k{display:inline-block;background:#061418;border:1px solid var(--line);border-radius:6px;padding:0 6px;font-weight:700}
+  .install .os{margin-top:8px}
+  .install .os+.os{border-top:1px solid var(--line);padding-top:8px}
 </style>
 </head>
 <body>
@@ -120,10 +155,14 @@
     <button data-v="measure" class="on">Ölçüm</button>
     <button data-v="history">Geçmiş</button>
     <button data-v="data">Veriler</button>
+    <button data-v="method">Nasıl hesaplıyoruz?</button>
   </nav>
 </div>
 
 <div class="wrap">
+  <div class="demo" id="demoBar">🧪 <span><b>Örnek veri modu:</b> Bu veriler gerçek değil. Uygulamanın 2 haftalık kullanımda nasıl çalıştığını göstermek için üretildi. Senin ölçümlerin ayrı saklanıyor.</span>
+    <button class="btn" id="demoExit">Gerçek verilerime dön</button></div>
+
   <!-- ================= ÖLÇÜM ================= -->
   <section class="view on" id="v-measure">
     <div class="grid">
@@ -137,8 +176,7 @@
           <div class="scan"></div>
           <svg class="ring" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="48" fill="none" stroke="#1f4a55" stroke-width="1.6"/>
-            <circle id="ringFg" cx="50" cy="50" r="48" fill="none" stroke="#5be3b0" stroke-width="2.4"
-                    stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6"/>
+            <circle id="ringFg" cx="50" cy="50" r="48" fill="none" stroke="#5be3b0" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6"/>
           </svg>
         </div>
         <div class="chips" id="chips"></div>
@@ -147,16 +185,31 @@
           <button class="btn" id="startBtn" disabled>Kamerayı aç</button>
           <button class="btn main" id="measureBtn" disabled>Ölç</button>
         </div>
+        <div class="metrics" id="metrics"></div>
       </div>
 
-      <div>
+      <div class="stack">
+        <div class="card ci" id="ciCard">
+          <h2>Kısa check-in ✍️ <span class="muted small" style="font-weight:500">10 saniye</span></h2>
+          <div class="q"><label for="ciSleep">😴 Kaç saat uyudun? <b id="ciSleepV">7</b> saat</label>
+            <input type="range" id="ciSleep" min="3" max="12" step="0.5" value="7"></div>
+          <div class="q"><span class="ql">🛏️ Uykun nasıldı?</span>
+            <div class="scale" id="ciQ" data-k="sleepQ"></div>
+            <div class="scale-l"><span>Çok kötü</span><span>Çok iyi</span></div></div>
+          <div class="q"><span class="ql">😌 Şu an ne kadar gerginsin?</span>
+            <div class="scale" id="ciS" data-k="stress"></div>
+            <div class="scale-l"><span>Hiç</span><span>Çok</span></div></div>
+          <div class="q"><span class="ql">🍽️ Dün akşam… <span class="muted small" style="font-weight:500">(uyanları seç, hiçbiri de olabilir)</span></span>
+            <div class="tags" id="ciTags"></div></div>
+          <div class="row"><button class="btn main" id="ciSave">Kaydet</button><button class="btn ghost" id="ciSkip">Bugün atla</button></div>
+        </div>
+
         <div class="card">
           <div class="score">
             <div class="gauge">
               <svg viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="42" fill="none" stroke="#0c252b" stroke-width="10"/>
-                <circle id="gaugeFg" cx="50" cy="50" r="42" fill="none" stroke="#5be3b0" stroke-width="10"
-                        stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+                <circle id="gaugeFg" cx="50" cy="50" r="42" fill="none" stroke="#5be3b0" stroke-width="10" stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
               </svg>
               <div class="val"><div><b id="gaugeVal">–</b><span id="gaugeSub">normaline göre</span></div></div>
             </div>
@@ -164,76 +217,125 @@
               <h3>Bugünkü şişkinlik</h3>
               <p class="lvl" id="lvl">Henüz ölçüm yok</p>
               <div class="muted small" id="lvlSub">Sabah uyanınca, aynı ışıkta, düz bakarak ölç.</div>
+              <div class="pills" id="pills"></div>
             </div>
           </div>
-          <div class="tip" id="tip">💡 İlk 7 gün kişisel normalin öğreniliyor. Ondan sonra öneriler başlıyor.</div>
+          <div class="trend" id="trend"></div>
+          <div class="tip" id="tip">💡 İlk gün kişisel normalin öğreniliyor. 2. günden itibaren öneriler başlıyor.</div>
+          <div class="row" id="ciOpenRow" style="display:none"><button class="btn" id="ciOpen">Check-in ekle</button></div>
         </div>
-
-        <div class="metrics" id="metrics"></div>
-        <p class="muted small" style="margin-top:10px">Küçük grafikler son 3 saniyedeki canlı değerleri gösteriyor. Çizgi ne kadar düzse ölçüm o kadar güvenilir.</p>
       </div>
     </div>
   </section>
 
   <!-- ================= GEÇMİŞ ================= -->
   <section class="view" id="v-history">
-    <div class="card">
-      <h2>Normaline göre sapma</h2>
-      <div id="baseProg"></div>
-      <div class="chart"><canvas id="chart"></canvas></div>
-      <p class="muted small" style="margin:8px 0 0">Yeşil bant: normal (%3'ün altı) · sarı: hafif · kırmızı: belirgin</p>
+    <div class="stack">
+      <div class="card">
+        <h2>Şişkinlik skoru</h2>
+        <div id="baseProg"></div>
+        <div class="chart"><canvas id="chartP"></canvas></div>
+        <p class="muted small" style="margin:8px 0 0">Skor, o sabahın kişisel normalinden kaç "dalgalanma birimi" (z) uzakta olduğunu gösterir. Yeşil bant normal, sarı hafif, kırmızı belirgin. Etrafında halka olan noktalar check-in'de "tuzlu yedim" denen sabahlar.</p>
+      </div>
+      <div class="card">
+        <h2>Seni ne etkiliyor? <span class="badge b-wip">kişisel analiz</span></h2>
+        <p class="muted small" style="margin-top:-6px">Bir etkenin olduğu sabahlarla olmadığı sabahların şişkinlik ortalamaları karşılaştırılır. İki durumdan da en az 3 gün olunca ve fark ölçüm hatasının 2 katından büyük çıkınca ✓ ile işaretlenir.</p>
+        <div class="trig" id="trig"></div>
+      </div>
+      <div class="card">
+        <h2>Stres skoru</h2>
+        <div class="chart s"><canvas id="chartS"></canvas></div>
+        <p class="muted small" style="margin:8px 0 0">Şimdilik check-in cevaplarından hesaplanıyor (0-100). Parmak ucu nabız ölçümü eklenince HRV ile güçlenecek.</p>
+      </div>
+      <div class="days" id="days"></div>
+      <div class="row"><button class="btn" id="demoEnter">🧪 Örnek veriyle göster</button><span class="muted small">2 haftalık örnek kullanımla tüm analizleri gösterir. Senin verilerin etkilenmez.</span></div>
     </div>
-    <div class="days" id="days"></div>
   </section>
 
   <!-- ================= VERİLER ================= -->
   <section class="view" id="v-data">
     <div class="card">
-      <h2>Ne ölçülüyor?</h2>
-      <div class="explain">
-        <div class="ex"><b><i style="background:var(--sky)"></i>Gözler arası mesafe</b>
-          <span class="small muted">Dış göz köşeleri (nokta 33 ↔ 263). Kemiğe bağlı, şişmeden az etkilenir. Diğer mesafeler buna bölünür, böylece kameraya yakın/uzak durman sonucu değiştirmez.</span></div>
-        <div class="ex"><b><i style="background:var(--mint)"></i>Yüz genişliği oranı</b>
-          <span class="small muted">Elmacık hizası (234 ↔ 454) ÷ gözler arası. Şişkinlikte artar.</span></div>
-        <div class="ex"><b><i style="background:var(--sand)"></i>Çene genişliği oranı</b>
-          <span class="small muted">Alt çene (172 ↔ 397) ÷ gözler arası. Şişkinlikte artar.</span></div>
-        <div class="ex"><b><i style="background:var(--coral)"></i>Göz açıklığı oranı</b>
-          <span class="small muted">Göz kapakları arası ÷ göz genişliği. Göz kapağı şişince azalır.</span></div>
-      </div>
-
       <h2>Son ölçümün kalitesi</h2>
-      <p class="small muted" style="margin-top:-6px">Bir ölçüm 3 saniyede onlarca kareden oluşur. Kaydedilen değer bu karelerin ortancasıdır (medyan). Dalgalanma %1'in altındaysa ölçüm çok tutarlıdır.</p>
+      <p class="small muted" style="margin-top:-6px">Bir ölçüm 3 saniyede onlarca kareden oluşur, kaydedilen değer bu karelerin ortancasıdır (medyan). Dalgalanma %1'in altındaysa ölçüm çok tutarlıdır.</p>
       <div class="scroll"><table id="qTable"></table></div>
-
       <h2 style="margin-top:22px">Tüm kayıtlar</h2>
       <div class="scroll"><table id="allTable"></table></div>
-
       <h2 style="margin-top:22px">Son kaydın ham hali (JSON)</h2>
-      <p class="small muted" style="margin-top:-6px">Bilgisayarda saklanan verinin tamamı bu. Fotoğraf, video ya da yüz noktalarının koordinatları yok.</p>
+      <p class="small muted" style="margin-top:-6px">Cihazında saklanan verinin tamamı bu. Fotoğraf, video ya da yüz noktalarının koordinatları yok.</p>
       <pre id="json">Kayıt yok</pre>
-
       <div class="row">
         <button class="btn" id="exportBtn">Dışa aktar (.json)</button>
         <button class="btn" id="importBtn">İçe aktar</button>
         <input id="importFile" type="file" accept="application/json" hidden>
         <button class="btn" id="clearBtn">Verileri sil</button>
+        <span class="small muted" id="dataMsg"></span>
       </div>
     </div>
   </section>
 
-  <p class="warn">⚠️ Bu uygulama tıbbi bir cihaz değildir, teşhis koymaz. Öneriler genel yaşam tarzı tavsiyesidir.
-    · <a href="#" id="showConsent" style="color:var(--muted)">Katılım bilgileri</a></p>
+  <!-- ================= YÖNTEM ================= -->
+  <section class="view" id="v-method">
+    <div class="stack">
+      <div class="card">
+        <h2>Nasıl hesaplıyoruz? <span class="badge b-wip">doğrulama aşamasında</span></h2>
+        <p class="muted" style="margin-top:0">Bu bir araştırma prototipi. Formüllerin hepsi açık. Ağırlıklar ve eşikler şu an başlangıç değerleri, pilot deney verileriyle güncellenecek.</p>
+        <div class="explain">
+          <div class="ex"><b><i class="dot" style="background:var(--sky)"></i>Gözler arası mesafe</b><span class="small muted">Dış göz köşeleri (MediaPipe nokta 33 ↔ 263). Kemiğe bağlı, şişmeden az etkilenir. Diğer mesafeler buna bölünür, böylece kameraya uzaklık sonucu değiştirmez.</span></div>
+          <div class="ex"><b><i class="dot" style="background:var(--mint)"></i>Yüz genişliği oranı</b><span class="small muted">Elmacık hizası (234 ↔ 454) ÷ gözler arası. Şişkinlikte artması beklenir.</span></div>
+          <div class="ex"><b><i class="dot" style="background:var(--sand)"></i>Çene genişliği oranı</b><span class="small muted">Alt çene (172 ↔ 397) ÷ gözler arası. Şişkinlikte artması beklenir.</span></div>
+          <div class="ex"><b><i class="dot" style="background:var(--coral)"></i>Göz açıklığı oranı</b><span class="small muted">Göz kapakları arası ÷ göz genişliği. Göz kapağı şişince ya da uykusuzlukta azalır.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>1 · Kişisel normal</h2>
+        <p class="muted small" style="margin-top:-6px">Her ölçüm, kişinin <b>kendi</b> önceki günleriyle kıyaslanır (son 14 günün sabah ölçümleri). En az 2 gün gerekir, 7 güne kadar "erken tahmin" olarak gösterilir.</p>
+        <div class="formula">μ = önceki günlerin ortalaması    σ = önceki günlerin dalgalanması (std. sapma)
+z = (bugünkü değer − μ) / σ</div>
+        <h2 style="margin-top:20px">2 · Şişkinlik skoru</h2>
+        <div class="formula">Şişkinlik = ( z_yüz + z_çene − z_göz ) / 3
+
+  &lt; 1 → normal     1 – 2 → hafif     &gt; 2 → belirgin
+  (erken tahminde eşikler 1.2 ve 2.2)</div>
+        <h2 style="margin-top:20px">3 · Stres skoru (check-in)</h2>
+        <div class="formula">Stres = 100 × ( 0.5·gerginlik + 0.3·uyku açığı + 0.2·kötü uyku )
+
+  gerginlik  = (cevap − 1) / 4
+  uyku açığı = (kişinin ort. uykusu − dün gece) / 3   → 0 ile 1 arası
+  kötü uyku  = (5 − uyku kalitesi) / 4</div>
+        <h2 style="margin-top:20px">4 · Tetikleyici analizi</h2>
+        <div class="formula">etki = ort(şişkinlik | etken var) − ort(şişkinlik | etken yok)
+SH   = √( s²₁/n₁ + s²₂/n₂ )
+
+Etkili ✓  ⇔  n₁ ≥ 3,  n₂ ≥ 3  ve  etki &gt; 2·SH   (≈ %95 güven)</div>
+        <h2 style="margin-top:20px">5 · Öneri motoru</h2>
+        <p class="muted small" style="margin:0">Şişkinlik yüksekse önce o sabahın check-in'inde işaretlenen etkenlere bakılır. Kişide etkisi kanıtlanmış etken öne alınır, etken yoksa genel öneri verilir. Şişkinlik normal ama stres yüksekse stres önerisi gelir. Son 7 öneri tekrar edilmez. Öneriler elle yazılmış sabit bir kütüphaneden gelir, yapay zekâ ile anlık üretilmez.</p>
+      </div>
+      <div class="card">
+        <h2>Bilimsel dayanak</h2>
+        <ul class="src small">
+          <li><b>Uykusuzluk yüzde görülebilir.</b> Uykusuz bırakılan kişilerin yüzleri daha şiş gözlü, sarkık göz kapaklı ve koyu göz altlı olarak değerlendirilmiş. <span class="badge b-ok">kanıtlı</span><br>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/23997369/">Sundelin ve ark., Sleep 2013: Cues of fatigue</a> · <a href="https://research-portal.st-andrews.ac.uk/en/publications/the-effect-of-sleep-deprivation-on-objective-and-subjective-measu/">Holding ve ark., J Sleep Res 2019: objektif ölçümler (n=181)</a></li>
+          <li><b>Parmak ucu kamera ölçümü (planlanan stres modülü).</b> Telefon kamerasıyla parmak ucundan ölçülen nabız EKG ile çok yüksek uyum gösteriyor, yüzden ölçüm ise daha az doğru. <span class="badge b-ok">kanıtlı</span><br>
+            <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5368348/">Yan ve ark., JMIR mHealth 2017: fingertip vs facial PPG</a></li>
+          <li><b>Tuzun yüz oranlarına etkisi.</b> Tuzlu beslenmenin ertesi sabah yüz oranlarında ölçülebilir bir değişim yaratıp yaratmadığını doğrudan test eden bir çalışma bulamadık. Pilot deneyimiz bunu test ediyor. <span class="badge b-wip">test ediliyor</span></li>
+          <li><b>Yüz noktaları:</b> Google MediaPipe Face Landmarker (468 nokta, cihaz üzerinde çalışır).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <p class="warn">⚠️ Bu uygulama tıbbi bir cihaz değildir, teşhis koymaz. Öneriler genel yaşam tarzı tavsiyesidir. · <a href="#" id="showConsent">Katılım bilgileri</a></p>
 </div>
 
-<!-- ================= ONAY EKRANI ================= -->
+<!-- ================= ONAY ================= -->
 <div class="modal" id="consent" role="dialog" aria-modal="true" aria-labelledby="cTitle">
   <div class="sheet">
     <h2 id="cTitle">Teste hoş geldin 👋</h2>
-    <p class="muted" style="margin-top:-4px">Bu, geliştirme aşamasındaki bir self-care uygulamasının şişkinlik ölçümü testidir. Başlamadan önce lütfen oku.</p>
-
+    <p class="muted" style="margin-top:-4px">Bu, geliştirme aşamasındaki bir self-care uygulamasının testidir. Başlamadan önce lütfen oku.</p>
     <h3 style="margin-top:16px">Ne toplanıyor?</h3>
     <ul class="small">
       <li>Yüzündeki bazı noktalar arasındaki <b>oranlar</b> (yüz genişliği, çene genişliği, göz açıklığı), ölçüm saati ve ortam ışığı.</li>
+      <li>İstersen doldurduğun kısa <b>check-in</b> cevapları (uyku, gerginlik, dün akşam tuzlu ya da geç yeme gibi).</li>
       <li><b>Fotoğraf ve video kaydedilmez.</b> Yüz noktalarının koordinatları da saklanmaz. Kamera görüntüsü sadece senin cihazında, anlık olarak işlenir.</li>
     </ul>
     <h3>Nerede saklanıyor, kim görüyor?</h3>
@@ -243,13 +345,23 @@
       <li>Gönderdiğin veriler sadece bu uygulamanın geliştirilmesi için kullanılır, kimseyle paylaşılmaz ve test bitince silinir.</li>
       <li>İstediğin zaman "Veriler" sekmesinden tüm verilerini silebilir, testi bırakabilirsin.</li>
     </ul>
-
-    <div class="alertbox">⚠️ <b>Önemli:</b> Gizli sekmeden girme ve tarayıcı geçmişini/site verilerini temizleme, yoksa ölçümlerin silinir. Her gün <b>aynı cihaz ve aynı tarayıcıdan</b> gir. Bu sayfayı yer imlerine ekle.</div>
-
+    <div class="install" id="installBox">
+      <b class="t">📲 Önce ana ekrana ekle</b>
+      <span>Uygulama gibi tek dokunuşla açılır, her sabah ölçmeyi unutmazsın.</span>
+      <div class="os" id="osIos"><b>iPhone (Safari):</b>
+        <ol><li>Alttaki <span class="k">Paylaş ⬆︎</span> butonuna dokun.</li>
+            <li><span class="k">Ana Ekrana Ekle</span>'yi seç, sonra <span class="k">Ekle</span>.</li>
+            <li>Bu sayfayı kapat ve testi <b>ana ekrandaki Self-care ikonundan</b> başlat. iPhone'da tarayıcıdaki ve ikondaki veriler ayrı tutulur, ölçümlerini hep ikondan yap.</li></ol></div>
+      <div class="os" id="osAndroid"><b>Android (Chrome):</b>
+        <ol><li>Sağ üstteki <span class="k">⋮</span> menüsüne dokun.</li>
+            <li><span class="k">Ana ekrana ekle</span> ya da <span class="k">Uygulamayı yükle</span>'yi seç.</li>
+            <li>Bundan sonra uygulamayı ana ekrandaki <b>Self-care</b> ikonundan aç.</li></ol>
+        <button class="btn" id="installBtn" type="button" style="display:none;margin-top:8px">📲 Tek dokunuşla ana ekrana ekle</button></div>
+    </div>
+    <div class="alertbox">⚠️ <b>Önemli:</b> Gizli sekmeden girme ve tarayıcı geçmişini/site verilerini temizleme, yoksa ölçümlerin silinir. Her gün <b>aynı cihazdan</b> ve aynı yerden (ana ekran ikonu) gir.</div>
     <label class="field small">Katılımcı kodun (adını yazma, ör. Test-1)
-      <input type="text" id="pCode" maxlength="20" autocomplete="off" placeholder="Test-1">
-    </label>
-    <label class="check"><input type="checkbox" id="c1"> Yukarıdaki bilgileri okudum. Yüz oranlarımın ve ölçüm bilgilerimin cihazımda işlenmesine ve dışa aktarıp gönderdiğim verilerin bu test kapsamında kullanılmasına açık rıza veriyorum.</label>
+      <input type="text" id="pCode" maxlength="20" autocomplete="off" placeholder="Test-1"></label>
+    <label class="check"><input type="checkbox" id="c1"> Yukarıdaki bilgileri okudum. Yüz oranlarımın, check-in cevaplarımın ve ölçüm bilgilerimin cihazımda işlenmesine ve dışa aktarıp gönderdiğim verilerin bu test kapsamında kullanılmasına açık rıza veriyorum.</label>
     <label class="check"><input type="checkbox" id="c2"> Bu uygulamanın tıbbi cihaz olmadığını, sonuçların teşhis amaçlı olmadığını anlıyorum.</label>
     <div class="row"><button class="btn main" id="consentBtn" disabled>Onaylıyorum, başla</button></div>
     <p class="small muted" id="consentInfo"></p>
@@ -261,84 +373,295 @@ import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3"
 const { FaceLandmarker, FilesetResolver } = vision;
 
 {
-// ================= Ayarlar =================
+// ######################## ENGINE START ########################
+const ALGO = { puff: "puff-v2", stress: "stress-v1", trig: "trig-v1" };
+const MKEYS = ["faceWidth", "jawWidth", "eyeOpen"];
+const FACTORS = {
+  salt:       { label: "Tuzlu yemek", tag: "Tuzlu yedim" },
+  late:       { label: "Geç yemek",   tag: "Geç yedim (21'den sonra)" },
+  lowWater:   { label: "Az su",       tag: "Az su içtim" },
+  alcohol:    { label: "Alkol",       tag: "Alkol" },
+  shortSleep: { label: "Az uyku",     tag: null }
+};
+const CAUSE_ORDER = ["salt", "late", "alcohol", "shortSleep", "lowWater"];
+const REF_DAYS = 14, MIN_DAYS = 2, FULL_DAYS = 7;
+
+const meanOf = a => a.reduce((s, v) => s + v, 0) / a.length;
+const sdOf = a => { if (a.length < 2) return 0; const m = meanOf(a); return Math.sqrt(a.reduce((s, v) => s + (v - m) ** 2, 0) / (a.length - 1)); };
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+function localDay(ts){ const d = new Date(ts); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
+const dayOf = r => r.day || localDay(r.ts);
+
+function dailyFirst(list){
+  const m = new Map();
+  for (const r of list){ const d = dayOf(r); if (!m.has(d) || r.ts < m.get(d).ts) m.set(d, r); }
+  return [...m.values()].sort((a, b) => a.ts.localeCompare(b.ts));
+}
+
+function analyze(listIn){
+  const list = [...listIn].sort((a, b) => a.ts.localeCompare(b.ts));
+  const firsts = dailyFirst(list);
+  const out = new Map();
+  for (const r of list){
+    const d = dayOf(r);
+    const prev = firsts.filter(f => dayOf(f) < d).slice(-REF_DAYS);
+    const res = { refDays: prev.length, level: "baseline", P: null, pct: null, early: false, z: null, stress: null, factors: [] };
+    if (r.checkin){
+      const c = r.checkin;
+      const prevSleep = list.filter(x => x.ts < r.ts && x.checkin && typeof x.checkin.sleepH === "number").map(x => x.checkin.sleepH);
+      const avgSleep = prevSleep.length >= 3 ? meanOf(prevSleep) : 7.5;
+      const g = (c.stress - 1) / 4, u = clamp((avgSleep - c.sleepH) / 3, 0, 1), k = (5 - c.sleepQ) / 4;
+      res.stress = Math.round(100 * (0.5*g + 0.3*u + 0.2*k));
+      res.factors = (c.tags || []).filter(t => FACTORS[t] && FACTORS[t].tag);
+      if (prevSleep.length >= 3 ? c.sleepH <= avgSleep - 1 : c.sleepH < 6) res.factors.push("shortSleep");
+    }
+    if (prev.length >= MIN_DAYS){
+      const mu = {}, z = {};
+      for (const k of MKEYS){
+        const vals = prev.map(f => f.metrics[k]);
+        mu[k] = meanOf(vals);
+        const sd = Math.max(sdOf(vals), mu[k] * 0.01, 1e-6);
+        z[k] = (r.metrics[k] - mu[k]) / sd;
+      }
+      const P = (z.faceWidth + z.jawWidth - z.eyeOpen) / 3;
+      const pc = k => (r.metrics[k] / mu[k] - 1) * 100;
+      res.P = +P.toFixed(2);
+      res.pct = +(0.4*pc("faceWidth") + 0.4*pc("jawWidth") - 0.2*pc("eyeOpen")).toFixed(1);
+      res.z = { faceWidth: +z.faceWidth.toFixed(2), jawWidth: +z.jawWidth.toFixed(2), eyeOpen: +z.eyeOpen.toFixed(2) };
+      res.early = prev.length < FULL_DAYS;
+      const [t1, t2] = res.early ? [1.2, 2.2] : [1, 2];
+      res.level = P < t1 ? "normal" : P < t2 ? "mid" : "high";
+    }
+    out.set(r.id, res);
+  }
+  const rows = firsts.map(r => ({ r, a: out.get(r.id) })).filter(x => x.a.P != null && x.r.checkin);
+  const triggers = {};
+  for (const f of Object.keys(FACTORS)){
+    const w = rows.filter(x => x.a.factors.includes(f)).map(x => x.a.P);
+    const wo = rows.filter(x => !x.a.factors.includes(f)).map(x => x.a.P);
+    const t = { n1: w.length, n2: wo.length, effect: null, se: null, status: "collecting" };
+    if (w.length >= 3 && wo.length >= 3){
+      t.effect = +(meanOf(w) - meanOf(wo)).toFixed(2);
+      t.se = +Math.sqrt(sdOf(w)**2 / w.length + sdOf(wo)**2 / wo.length).toFixed(2);
+      t.status = (t.effect > 0.3 && t.effect > 2 * t.se) ? "sig" : "nosig";
+    }
+    triggers[f] = t;
+  }
+  return { byId: out, triggers, firsts };
+}
+
+function trendFor(r, A){
+  const firsts = A.firsts.filter(f => A.byId.get(f.id).P != null);
+  const i = firsts.findIndex(f => f.id === r.id);
+  if (i < 1) return null;
+  const p0 = A.byId.get(firsts[i].id), p1 = A.byId.get(firsts[i-1].id), p2 = i >= 2 ? A.byId.get(firsts[i-2].id) : null;
+  if (p2 && p0.P - p1.P >= 0.3 && p1.P - p2.P >= 0.3) return { kind: "up2", text: "📈 2 gündür şişkinliğin artıyor." };
+  if (p1.P - p0.P >= 0.8) return { kind: "better", text: "🎉 Dünden belirgin şekilde daha iyisin!" };
+  if (p0.level === "normal" && (p1.level === "mid" || p1.level === "high")) return { kind: "back", text: "👏 Normale döndün." };
+  if (p0.P - p1.P >= 0.8) return { kind: "worse", text: "↗️ Dünden biraz daha şişkin görünüyorsun." };
+  return null;
+}
+
+function chooseCause(a, triggers){
+  const present = CAUSE_ORDER.filter(f => a.factors.includes(f));
+  const sig = present.filter(f => triggers[f] && triggers[f].status === "sig").sort((x, y) => triggers[y].effect - triggers[x].effect);
+  if (sig.length) return { f: sig[0], proven: true };
+  if (present.length) return { f: present[0], proven: false };
+  return null;
+}
+function choosePool(a, triggers){
+  if (a.level === "baseline") return { pool: "baseline", cause: null };
+  if (a.level === "mid" || a.level === "high"){
+    const c = chooseCause(a, triggers);
+    return { pool: c ? "puff_" + c.f : "puff_general", cause: c };
+  }
+  if (a.stress != null && a.stress >= 60) return { pool: "stress_high", cause: null };
+  if (a.stress != null && a.stress >= 35) return { pool: "stress_mid", cause: null };
+  return { pool: "normal_good", cause: null };
+}
+function pickFrom(pool, recent, rnd = Math.random){
+  const fresh = pool.filter(t => !recent.includes(t));
+  const list = fresh.length ? fresh : pool;
+  return list[Math.floor(rnd() * list.length)];
+}
+
+const TIPS = {
+  baseline: [
+    "Her sabah aynı saatte ölçersen normalin daha doğru çıkar.",
+    "Ölçümden önce yüzünü yıkama ya da krem sürme. Her gün aynı koşullarda ölç.",
+    "Işığın önden gelmesine dikkat et, pencereye karşı otur.",
+    "Normalini öğrenirken check-in'i de doldur. Seni neyin etkilediğini bulmak için gerekli.",
+    "Gözlüğün varsa ölçümde hep çıkar ya da hep tak, karıştırma.",
+    "Birkaç gün daha ölçüm yaparsan sana özel analizler açılacak."
+  ],
+  puff_salt: [
+    "Dün akşamki tuz bugün yüzünde su tutulması olarak görünüyor olabilir. Bugün işlenmiş ve hazır yiyecekleri azaltmayı dene.",
+    "Güne iki bardak suyla başla. Yeterli su, fazla tuzun atılmasına yardımcı olur.",
+    "Bugün öğünlerine potasyumdan zengin besinler ekle: muz, yoğurt, ayran, kuru fasulye, ıspanak.",
+    "Cips, kraker, turşu ve hazır çorbalar gizli tuz kaynaklarıdır. Bugün bunlara ara ver.",
+    "Yemeklere tuz yerine limon, nane, kekik ya da pul biber eklemeyi dene.",
+    "Paketli ürün alırken etikette sodyum miktarına bak, az tuzlu seçenekleri tercih et.",
+    "Kısa bir yürüyüş dolaşımı hızlandırır ve sabah şişkinliğinin daha çabuk inmesine yardım eder.",
+    "Bu akşam tuzlu atıştırmalık yerine meyve ya da tuzsuz kuruyemiş seç."
+  ],
+  puff_late: [
+    "Geç yenen yemek sabah şişkinliğini artırabilir. Bu akşam yatmadan en az 2-3 saat önce yemeyi dene.",
+    "Akşam yemeğini hafif tut: çorba, salata ya da ızgara bir protein iyi seçenekler.",
+    "Gece acıkırsan tuzlu atıştırmalık yerine bir meyve ya da yoğurt seç.",
+    "Bugün akşam yemeği için bir saat belirle ve telefonuna hatırlatıcı kur.",
+    "Yatmadan önce ağır ve yağlı yemekler uykunu da bölebilir. İkisi birlikte sabah şişkinliğine yol açar.",
+    "Yemekten sonra 10 dakikalık kısa bir yürüyüş sindirime yardımcı olur.",
+    "Bu akşam ana öğünü erkene al. Geç saatte acıkırsan bitki çayı iç."
+  ],
+  puff_alcohol: [
+    "Alkol vücudun sıvı dengesini bozar ve ertesi sabah yüzde şişkinlik yapabilir. Bugün bol su iç.",
+    "Bugün kafeini ve tuzu azalt, vücudunun dengesini bulmasına izin ver.",
+    "Bir dahaki sefere her alkollü içeceğin arasında bir bardak su içmeyi dene.",
+    "Soğuk suyla yüzünü yıkamak ve göz çevresine soğuk bir kaşık tutmak kısa sürede rahatlatabilir.",
+    "Bugün sebze ve meyve ağırlıklı beslen, hem su hem potasyum alırsın.",
+    "Bu gece erken yat. Alkol uyku kalitesini düşürür, telafi etmek iyi gelir."
+  ],
+  puff_lowWater: [
+    "Az su içmek vücudun su tutmasına neden olabilir. Bugün yanında bir şişe su taşı.",
+    "Saat başı birkaç yudum su içmeni hatırlatan bir alarm kur.",
+    "Suyu sevmiyorsan içine limon, nane ya da salatalık dilimleri ekle.",
+    "Salatalık, karpuz, portakal gibi sulu meyve ve sebzeler de su ihtiyacına katkı sağlar.",
+    "Her öğünle birlikte bir bardak su içmeyi alışkanlık hâline getir.",
+    "Çay ve kahveyi su yerine sayma, yanlarında mutlaka su da iç."
+  ],
+  puff_shortSleep: [
+    "Az uyku sabah göz çevresinde şişkinlik yapabilir. Bu gece normalinden 30 dakika erken yatmayı dene.",
+    "Yatmadan 1 saat önce ekranları bırak, telefon ışığı uykuya dalmayı zorlaştırır.",
+    "Bugün öğleden sonra kafeinden uzak dur, akşam uykunu etkilemesin.",
+    "Kısa bir öğle uykusu (20 dakika) toparlanmana yardım eder, ama uzun tutma.",
+    "Odanı karanlık ve serin tut. Uyku kalitesi doğrudan sabahki görünüşüne yansır.",
+    "Başını bir yastıkla hafif yükseltmek göz çevresinde sıvı birikimini azaltabilir.",
+    "Her gün aynı saatte uyanmak biyolojik saatini düzenler ve sabah şişkinliğini azaltır."
+  ],
+  puff_general: [
+    "Bugün normalinden biraz şişkin görünüyorsun. Bol su iç ve tuzlu yiyecekleri azalt.",
+    "Soğuk suyla yüz yıkamak ve hafif bir yüz masajı sıvının dağılmasına yardımcı olur.",
+    "Kısa bir yürüyüş ya da esneme hareketleri dolaşımı hızlandırır.",
+    "Dün neler yaptığını check-in'e eklersen sana nedenini daha iyi söyleyebilirim.",
+    "Bugün işlenmiş gıdalar yerine taze sebze ve meyve ağırlıklı beslen.",
+    "Göz çevresine birkaç dakika soğuk kompres uygulamak şişkinliği hafifletebilir.",
+    "Akşam yemeğini erken ve hafif tutmak yarın sabah için iyi bir yatırım."
+  ],
+  stress_high: [
+    "Gerginliğin yüksek görünüyor. 4 saniye nefes al, 4 saniye tut, 6 saniyede ver. Bunu 5 kez tekrarla.",
+    "Bugün 10 dakikalık bir yürüyüşe çık, mümkünse dışarıda ve telefonsuz.",
+    "Yapacaklarını kâğıda yaz ve en önemli tek işi seç. Geri kalanı bekleyebilir.",
+    "Güvendiğin biriyle kısa bir sohbet bile stresi hafifletir.",
+    "Bu akşam ekransız bir saat ayır: kitap, müzik ya da uzun bir duş.",
+    "Kafeini bugün sınırlı tut, gerginliği artırabilir.",
+    "Gerginlik uzun süredir devam ediyorsa bir uzmanla konuşmak iyi bir adım olabilir."
+  ],
+  stress_mid: [
+    "Biraz gergin bir gün olabilir. Gün ortasında 5 dakikalık bir mola planla.",
+    "Omuz ve boyun esnetmeleri birkaç dakikada rahatlatır.",
+    "Bugün bir şeye 'hayır' deme hakkını kendine tanı.",
+    "Kısa bir nefes egzersizi: burnundan 4 saniye al, ağzından 6 saniyede ver.",
+    "Akşam için seni dinlendirecek küçük bir şey planla."
+  ],
+  normal_good: [
+    "Normaline yakınsın, böyle devam 💧",
+    "Bugün dengeli görünüyorsun. Gün içinde su içmeyi unutma.",
+    "Harika bir sabah! Dünkü alışkanlıkların işe yarıyor gibi.",
+    "Bugün kendine iyi gelen bir şey yap, bu dengeyi koru.",
+    "Her şey yolunda görünüyor. Kısa bir yürüyüş günü daha da iyi yapar.",
+    "Düzenli ölçüm yapman çok değerli, bu sayede normalini giderek daha iyi tanıyoruz.",
+    "İyi uyku ve dengeli beslenme işe yarıyor. Aynen devam!"
+  ]
+};
+
+function causeText(cause, triggers){
+  if (!cause) return "";
+  const L = FACTORS[cause.f].label.toLowerCase();
+  if (cause.proven) return `Senin verilerinde ${L} olan sabahlarda şişkinlik skoru ortalama +${triggers[cause.f].effect} daha yüksek çıkıyor (etkisi gösterildi ✓).`;
+  if (cause.f === "shortSleep") return "Normalinden az uyuduğunu belirttin. Az uyku göz çevresinde şişkinlikle ilişkilendirilmiş.";
+  return `Dün akşam için "${FACTORS[cause.f].tag}" dedin. Bunun senin üzerindeki etkisi henüz yeterli veriyle gösterilmedi.`;
+}
+
+function makeDemo(){
+  let s = 42; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const noise = a => 1 + (rnd() - 0.5) * 2 * a;
+  const out = [], start = new Date(); start.setHours(8, 5, 0, 0); start.setDate(start.getDate() - 13);
+  const saltDays = new Set([2, 6, 9, 13]), shortDays = new Set([4, 10]), lateDays = new Set([6, 11]);
+  for (let i = 0; i < 14; i++){
+    const d = new Date(start); d.setDate(start.getDate() + i); d.setMinutes(d.getMinutes() + Math.round(rnd() * 40));
+    const iso = d.toISOString(), salt = saltDays.has(i), short = shortDays.has(i), late = lateDays.has(i);
+    const m = {
+      faceWidth: 2.10 * noise(0.006) * (salt ? 1.022 : 1) * (late ? 1.006 : 1),
+      jawWidth:  1.76 * noise(0.007) * (salt ? 1.025 : 1) * (late ? 1.008 : 1),
+      eyeOpen:   0.300 * noise(0.012) * (salt ? 0.965 : 1) * (short ? 0.94 : 1)
+    };
+    for (const k in m) m[k] = +m[k].toFixed(4);
+    const tags = []; if (salt) tags.push("salt"); if (late) tags.push("late"); if (i === 9) tags.push("lowWater");
+    out.push({ id: "demo-" + i, ts: iso, day: localDay(iso), schemaVersion: 3, participant: "ÖRNEK", demo: true, metrics: m,
+      conditions: { hour: d.getHours(), brightness: 120 + Math.round(rnd() * 30), validFrames: 60 + Math.round(rnd() * 15), totalFrames: 75 },
+      quality: Object.fromEntries(MKEYS.map(k => [k, { min: +(m[k] * 0.99).toFixed(4), max: +(m[k] * 1.01).toFixed(4), cvPct: +(0.3 + rnd() * 0.6).toFixed(2) }])),
+      checkin: { sleepH: short ? 5 : +(7 + (rnd() - 0.5) * 1.5).toFixed(1), sleepQ: short ? 2 : 3 + Math.round(rnd()), stress: short ? 4 : Math.round(1 + rnd() * 2.5), tags },
+      tip: null });
+  }
+  return out;
+}
+// ######################## ENGINE END ########################
+
 const WASM = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm";
 const MODEL = "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task";
-const SCHEMA_VERSION = 2;
-const ALGO_VERSION = "puff-v1";
-const STORE_KEY = "selfcare.measurements.v1";
-const BASELINE_DAYS = 7;
+const SCHEMA_VERSION = 3;
+const REAL_KEY = "selfcare.measurements.v1", DEMO_KEY = "selfcare.demo.v1", CONSENT_KEY = "selfcare.consent.v1";
 const MEASURE_MS = 3000;
-
-const P = { eyeOuterL:33, eyeOuterR:263, cheekL:234, cheekR:454, jawL:172, jawR:397,
-            lUp:159, lDown:145, lIn:133, rUp:386, rDown:374, rIn:362, nose:1 };
-
+const LM = { eyeOuterL:33, eyeOuterR:263, cheekL:234, cheekR:454, jawL:172, jawR:397, lUp:159, lDown:145, lIn:133, rUp:386, rDown:374, rIn:362, nose:1 };
 const METRICS = [
   { k:"faceWidth", label:"Yüz genişliği", color:"#5be3b0" },
   { k:"jawWidth",  label:"Çene genişliği", color:"#ffd27a" },
   { k:"eyeOpen",   label:"Göz açıklığı",  color:"#ff7a6b" }
 ];
-
-const TIPS = {
-  normal: ["Normaline yakınsın, böyle devam 💧",
-           "Bugün dengeli görünüyorsun, gün içinde su içmeyi unutma.",
-           "Harika bir başlangıç, kısa bir yürüyüş günü daha da iyi yapar."],
-  mid:    ["Hafif şişkinlik var: bugün tuzlu atıştırmalıkları azaltmayı dene.",
-           "Güne iki bardak suyla başla, vücudun fazla sıvıyı atmasına yardımcı olur.",
-           "Soğuk suyla yüzünü yıkamak ve kısa bir yüz masajı göz çevresini rahatlatabilir."],
-  high:   ["Şişkinlik normalinin belirgin üstünde: bugün işlenmiş ve tuzlu yiyeceklerden uzak dur, bol su iç.",
-           "Dün geç saatte ya da tuzlu mu yedin? Bugün akşam yemeğini erken ve hafif tut.",
-           "Uyku düzeni şişkinliği çok etkiler; bu gece biraz daha erken yatmayı dene."]
-};
 const LEVEL = {
-  normal:  { t:"Normal",             c:"#5be3b0" },
-  mid:     { t:"Hafif şişkinlik",    c:"#ffd27a" },
-  high:    { t:"Belirgin şişkinlik", c:"#ff7a6b" },
+  normal:  { t:"Normal",               c:"#5be3b0" },
+  mid:     { t:"Hafif şişkinlik",      c:"#ffd27a" },
+  high:    { t:"Belirgin şişkinlik",   c:"#ff7a6b" },
   baseline:{ t:"Normalin öğreniliyor", c:"#6cc8ff" }
 };
+const stressLabel = s => s == null ? null : s >= 60 ? ["yüksek", "#ff7a6b"] : s >= 35 ? ["orta", "#ffd27a"] : ["düşük", "#5be3b0"];
+const TIP_VERSION = "t2";
 
-// ================= Yardımcılar =================
 const $ = id => document.getElementById(id);
 const video = $("video"), overlay = $("overlay"), octx = overlay.getContext("2d");
 let landmarker = null, running = false, lastFrame = null, lastVideoTime = -1, measuring = false;
-const liveBuf = { faceWidth:[], jawWidth:[], eyeOpen:[] };
-const LIVE_N = 90;
-
+const liveBuf = { faceWidth:[], jawWidth:[], eyeOpen:[] }, LIVE_N = 90;
 const esc = s => String(s).replace(/[&<>"']/g, ch => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[ch]));
 const median = a => { const s=[...a].sort((x,y)=>x-y), n=s.length; return n%2 ? s[(n-1)/2] : (s[n/2-1]+s[n/2])/2; };
-const mean = a => a.reduce((s,v)=>s+v,0)/a.length;
-const std = a => { const m=mean(a); return Math.sqrt(mean(a.map(v=>(v-m)**2))); };
-const fmtPct = v => v == null ? "–" : (v > 0 ? "+" : "") + v.toFixed(1) + "%";
+const fmtSigned = (v, d = 1) => v == null ? "–" : (v > 0 ? "+" : "") + v.toFixed(d);
 const setStatus = t => { $("status").textContent = t; };
 const fmtDate = iso => { const d = new Date(iso); return d.toLocaleDateString("tr-TR",{day:"numeric",month:"short"}) + " " + d.toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"}); };
 
-function loadAll(){ try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; } catch { return []; } }
-function saveAll(list){ try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch(e){ setStatus("Kaydedilemedi: " + e.message); } }
+let demoMode = false;
+try { demoMode = sessionStorage.getItem("selfcare.demoMode") === "1"; } catch {}
+const storeKey = () => demoMode ? DEMO_KEY : REAL_KEY;
+function loadAll(){ try { return JSON.parse(localStorage.getItem(storeKey())) || []; } catch { return []; } }
+function saveAll(list){ try { localStorage.setItem(storeKey(), JSON.stringify(list)); } catch(e){ setStatus("Kaydedilemedi: " + e.message); } }
+function getConsent(){ try { return JSON.parse(localStorage.getItem(CONSENT_KEY)); } catch { return null; } }
 
-// ================= Sekmeler =================
+let currentView = "measure";
 $("tabs").onclick = e => {
   const b = e.target.closest("button"); if (!b) return;
+  currentView = b.dataset.v;
   for (const x of $("tabs").children) x.classList.toggle("on", x === b);
-  for (const v of document.querySelectorAll(".view")) v.classList.toggle("on", v.id === "v-" + b.dataset.v);
+  for (const v of document.querySelectorAll(".view")) v.classList.toggle("on", v.id === "v-" + currentView);
   renderAll();
 };
 
-// ================= Geometri =================
 const px = lm => ({ x: lm.x * video.videoWidth, y: lm.y * video.videoHeight });
 const dist = (a,b) => { const A=px(a), B=px(b); return Math.hypot(A.x-B.x, A.y-B.y); };
-
 function computeMetrics(l){
-  const iod = dist(l[P.eyeOuterL], l[P.eyeOuterR]);
-  const eyeL = dist(l[P.lUp], l[P.lDown]) / dist(l[P.eyeOuterL], l[P.lIn]);
-  const eyeR = dist(l[P.rUp], l[P.rDown]) / dist(l[P.eyeOuterR], l[P.rIn]);
-  return {
-    faceWidth: dist(l[P.cheekL], l[P.cheekR]) / iod,
-    jawWidth:  dist(l[P.jawL], l[P.jawR]) / iod,
-    eyeOpen:   (eyeL + eyeR) / 2,
-    _sym: dist(l[P.nose], l[P.cheekL]) / dist(l[P.nose], l[P.cheekR])
-  };
+  const iod = dist(l[LM.eyeOuterL], l[LM.eyeOuterR]);
+  const eyeL = dist(l[LM.lUp], l[LM.lDown]) / dist(l[LM.eyeOuterL], l[LM.lIn]);
+  const eyeR = dist(l[LM.rUp], l[LM.rDown]) / dist(l[LM.eyeOuterR], l[LM.rIn]);
+  return { faceWidth: dist(l[LM.cheekL], l[LM.cheekR]) / iod, jawWidth: dist(l[LM.jawL], l[LM.jawR]) / iod,
+           eyeOpen: (eyeL + eyeR) / 2, _sym: dist(l[LM.nose], l[LM.cheekL]) / dist(l[LM.nose], l[LM.cheekR]) };
 }
-
 let lightLevel = 128, lightTick = 0;
 function brightness(){
   const c = document.createElement("canvas"); c.width = 32; c.height = 24;
@@ -347,7 +670,6 @@ function brightness(){
   for (let i=0;i<d.length;i+=4) s += 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
   return Math.round(s / (d.length/4));
 }
-
 function checks(m, blend){
   const sc = n => blend?.categories.find(c => c.categoryName === n)?.score ?? 0;
   return [
@@ -359,7 +681,6 @@ function checks(m, blend){
   ];
 }
 
-// ================= Çizim =================
 function drawOverlay(l){
   overlay.width = video.videoWidth; overlay.height = video.videoHeight;
   octx.clearRect(0,0,overlay.width,overlay.height);
@@ -371,23 +692,19 @@ function drawOverlay(l){
     octx.beginPath(); octx.moveTo(A.x,A.y); octx.lineTo(B.x,B.y); octx.stroke();
     for (const Q of [A,B]){ octx.fillStyle=c; octx.beginPath(); octx.arc(Q.x,Q.y,4,0,7); octx.fill(); }
     octx.shadowBlur=0; };
-  seg(P.eyeOuterL,P.eyeOuterR,"#6cc8ff");
-  seg(P.cheekL,P.cheekR,"#5be3b0");
-  seg(P.jawL,P.jawR,"#ffd27a");
-  seg(P.lUp,P.lDown,"#ff7a6b"); seg(P.rUp,P.rDown,"#ff7a6b");
+  seg(LM.eyeOuterL,LM.eyeOuterR,"#6cc8ff"); seg(LM.cheekL,LM.cheekR,"#5be3b0"); seg(LM.jawL,LM.jawR,"#ffd27a");
+  seg(LM.lUp,LM.lDown,"#ff7a6b"); seg(LM.rUp,LM.rDown,"#ff7a6b");
 }
-
 function spark(canvas, vals, color){
   const W = canvas.width = canvas.clientWidth * devicePixelRatio, H = canvas.height = canvas.clientHeight * devicePixelRatio;
   const g = canvas.getContext("2d"); g.clearRect(0,0,W,H);
   if (vals.length < 2) return;
-  const m = mean(vals), span = Math.max(m * 0.04, Math.max(...vals) - Math.min(...vals));
+  const m = meanOf(vals), span = Math.max(m * 0.04, Math.max(...vals) - Math.min(...vals));
   const lo = m - span/2 - m*0.005, hi = m + span/2 + m*0.005;
   g.strokeStyle = color; g.lineWidth = 2 * devicePixelRatio; g.lineJoin = "round"; g.beginPath();
   vals.forEach((v,i) => { const x = i/(LIVE_N-1)*W, y = H - (v-lo)/(hi-lo)*H; i ? g.lineTo(x,y) : g.moveTo(x,y); });
   g.stroke();
 }
-
 function renderMetrics(m){
   const box = $("metrics");
   if (!box.children.length){
@@ -397,18 +714,13 @@ function renderMetrics(m){
   for (const x of METRICS){
     const buf = liveBuf[x.k];
     $("mv-"+x.k).textContent = m ? m[x.k].toFixed(3) : "–";
-    $("md-"+x.k).textContent = buf.length > 10 ? `dalgalanma ±${(std(buf)/mean(buf)*100).toFixed(1)}%` : "dalgalanma –";
+    $("md-"+x.k).textContent = buf.length > 10 ? `dalgalanma ±${(sdOf(buf)/meanOf(buf)*100).toFixed(1)}%` : "dalgalanma –";
     spark($("ms-"+x.k), buf, x.color);
   }
 }
+const renderChips = list => { $("chips").innerHTML = list.map(c => `<span class="chip ${c.ok?"ok":"bad"}">${c.ok?"✓":"✕"} ${c.name}</span>`).join(""); };
+const setRing = f => { $("ringFg").style.strokeDashoffset = 301.6 * (1 - f); };
 
-function renderChips(list){
-  $("chips").innerHTML = list.map(c => `<span class="chip ${c.ok?"ok":"bad"}">${c.ok?"✓":"✕"} ${c.name}</span>`).join("");
-}
-
-function setRing(frac){ $("ringFg").style.strokeDashoffset = 301.6 * (1 - frac); }
-
-// ================= Döngü =================
 function loop(){
   if (!running) return;
   if (video.currentTime !== lastVideoTime){
@@ -428,15 +740,12 @@ function loop(){
   requestAnimationFrame(loop);
 }
 
-// ================= Ölçüm =================
 async function measure(){
   measuring = true; $("measureBtn").disabled = true; $("mirror").classList.add("measuring");
   const samples = { faceWidth:[], jawWidth:[], eyeOpen:[] };
-  let total = 0;
-  const t0 = performance.now();
+  let total = 0; const t0 = performance.now();
   while (performance.now() - t0 < MEASURE_MS){
-    const f = (performance.now() - t0) / MEASURE_MS;
-    setRing(f); setStatus("Ölçülüyor… kıpırdama");
+    setRing((performance.now() - t0) / MEASURE_MS); setStatus("Ölçülüyor… kıpırdama");
     total++;
     if (lastFrame?.ok) for (const k in samples) samples[k].push(lastFrame.m[k]);
     await new Promise(r => setTimeout(r, 40));
@@ -444,148 +753,199 @@ async function measure(){
   setRing(0); $("mirror").classList.remove("measuring"); measuring = false;
   const n = samples.faceWidth.length;
   if (n < 20){ setStatus(`Yeterli temiz kare yok (${n}/${total}). Düz bak, nötr yüzle tekrar dene.`); return; }
-
   const metrics = {}, quality = {};
   for (const k in samples){
     const a = samples[k];
     metrics[k] = +median(a).toFixed(4);
-    quality[k] = { min:+Math.min(...a).toFixed(4), max:+Math.max(...a).toFixed(4), cvPct:+(std(a)/mean(a)*100).toFixed(2) };
+    quality[k] = { min:+Math.min(...a).toFixed(4), max:+Math.max(...a).toFixed(4), cvPct:+(sdOf(a)/meanOf(a)*100).toFixed(2) };
   }
-  const now = new Date(), all = loadAll();
-  const rec = {
-    id: crypto.randomUUID ? crypto.randomUUID() : String(now.getTime()),
-    ts: now.toISOString(), schemaVersion: SCHEMA_VERSION, participant: getConsent()?.code || null, metrics,
-    conditions: { hour: now.getHours(), brightness: lightLevel, validFrames: n, totalFrames: total },
-    quality, result: null
-  };
-  rec.result = scoreRecord(rec, all);
-  if (rec.result.level !== "baseline") rec.result.tip = pickTip(rec.result.level, all);
-  all.push(rec); saveAll(all);
+  const now = new Date(), iso = now.toISOString();
+  const rec = { id: crypto.randomUUID ? crypto.randomUUID() : String(now.getTime()), ts: iso, day: localDay(iso),
+    schemaVersion: SCHEMA_VERSION, participant: demoMode ? "ÖRNEK" : (getConsent()?.code || null), metrics,
+    conditions: { hour: now.getHours(), brightness: lightLevel, validFrames: n, totalFrames: total }, quality, checkin: null, tip: null };
+  const all = loadAll(); all.push(rec); saveAll(all);
   setStatus(`Kaydedildi ✓ · ${n} temiz kare kullanıldı`);
+  openCheckin(rec.id);
   renderAll();
 }
 
-// ================= Referans + skor =================
-function baselineFrom(list){
-  const days = [...new Set(list.map(r => r.ts.slice(0,10)))].sort();
-  if (days.length < BASELINE_DAYS) return { ready:false, days:days.length };
-  const set = new Set(days.slice(0, BASELINE_DAYS));
-  const base = list.filter(r => set.has(r.ts.slice(0,10)));
-  const b = { ready:true, days:days.length };
-  for (const x of METRICS) b[x.k] = mean(base.map(r => r.metrics[x.k]));
-  return b;
+let ciTarget = null;
+const ciState = { sleepQ: null, stress: null, tags: new Set() };
+const FACES_Q = ["😫","😕","😐","🙂","😴"], FACES_S = ["😌","🙂","😐","😟","😫"];
+function buildScale(el, faces){
+  el.innerHTML = faces.map((f, i) => `<button type="button" data-v="${i+1}" aria-label="${i+1}">${f}</button>`).join("");
+  el.onclick = e => { const b = e.target.closest("button"); if (!b) return;
+    ciState[el.dataset.k] = +b.dataset.v;
+    for (const x of el.children) x.classList.toggle("on", x === b); };
 }
-const EARLY_DAYS = 2; // erken geri bildirim için gereken önceki gün sayısı
-function scoreRecord(rec, prev){
-  const b = baselineFrom(prev);
-  let ref = b, early = false;
-  if (!b.ready){
-    // Erken mod: bugünden önceki günlerin ortalamasıyla kıyasla, eşikleri daha yüksek tut
-    const today = rec.ts.slice(0,10);
-    const before = prev.filter(r => r.ts.slice(0,10) < today);
-    const days = new Set(before.map(r => r.ts.slice(0,10))).size;
-    if (days < EARLY_DAYS) return { algoVersion: ALGO_VERSION, level:"baseline", deviationPct:null };
-    ref = {}; for (const x of METRICS) ref[x.k] = mean(before.map(r => r.metrics[x.k]));
-    early = true;
-  }
-  const pct = k => (rec.metrics[k] / ref[k] - 1) * 100;
-  const dev = 0.4*pct("faceWidth") + 0.4*pct("jawWidth") - 0.2*pct("eyeOpen");
-  const [t1, t2] = early ? [4, 7] : [3, 6];
-  return { algoVersion: ALGO_VERSION, level: dev < t1 ? "normal" : dev < t2 ? "mid" : "high", deviationPct: +dev.toFixed(1), early };
+buildScale($("ciQ"), FACES_Q); buildScale($("ciS"), FACES_S);
+$("ciTags").innerHTML = Object.entries(FACTORS).filter(([,v]) => v.tag).map(([k,v]) => `<button type="button" data-t="${k}">${v.tag}</button>`).join("");
+$("ciTags").onclick = e => { const b = e.target.closest("button"); if (!b) return;
+  const t = b.dataset.t; ciState.tags.has(t) ? ciState.tags.delete(t) : ciState.tags.add(t); b.classList.toggle("on"); };
+$("ciSleep").oninput = e => { $("ciSleepV").textContent = e.target.value; };
+function openCheckin(id){
+  ciTarget = id; ciState.sleepQ = null; ciState.stress = null; ciState.tags.clear();
+  for (const el of [$("ciQ"), $("ciS"), $("ciTags")]) for (const x of el.children) x.classList.remove("on");
+  $("ciCard").classList.add("on"); $("ciOpenRow").style.display = "none";
+  $("ciCard").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
-function pickTip(level, all){
-  const pool = TIPS[level] || [];
-  const recent = all.slice(-5).map(r => r.result?.tip);
-  const fresh = pool.filter(t => !recent.includes(t));
-  const list = fresh.length ? fresh : pool;
-  return list[Math.floor(Math.random() * list.length)] || "";
+function closeCheckin(){ $("ciCard").classList.remove("on"); ciTarget = null; }
+$("ciSave").onclick = () => {
+  if (!ciState.sleepQ || !ciState.stress){ $("ciSave").textContent = "Uyku ve gerginliği seç"; setTimeout(() => { $("ciSave").textContent = "Kaydet"; }, 1800); return; }
+  const all = loadAll(), r = all.find(x => x.id === ciTarget);
+  if (r){ r.checkin = { sleepH: +$("ciSleep").value, sleepQ: ciState.sleepQ, stress: ciState.stress, tags: [...ciState.tags], at: new Date().toISOString() }; r.tip = null; saveAll(all); }
+  closeCheckin(); renderAll();
+};
+$("ciSkip").onclick = () => { closeCheckin(); renderAll(); };
+$("ciOpen").onclick = () => { const all = loadAll().sort((a, b) => a.ts.localeCompare(b.ts)); if (all.length) openCheckin(all[all.length-1].id); };
+
+function ensureTip(r, a, A, all){
+  const sig = TIP_VERSION + "/" + a.level + "/" + (r.checkin ? "c" : "n");
+  if (r.tip && r.tip.sig === sig) return r.tip;
+  const { pool, cause } = choosePool(a, A.triggers);
+  const recent = all.filter(x => x.id !== r.id && x.tip).slice(-7).map(x => x.tip.text);
+  r.tip = { pool, text: pickFrom(TIPS[pool], recent), cause: cause ? cause.f : null, sig };
+  saveAll(all);
+  return r.tip;
 }
 
-// ================= Ekranlar =================
 function renderAll(){
-  const all = loadAll(), last = all[all.length-1], b = baselineFrom(all);
-  // --- skor kartı
+  const all = loadAll().sort((a, b) => a.ts.localeCompare(b.ts));
+  const A = analyze(all);
+  const last = all[all.length - 1];
+  $("demoBar").classList.toggle("on", demoMode);
+  $("demoEnter").parentElement.style.display = demoMode ? "none" : "flex";
+  const filledDays = A.firsts.length;
   if (last){
-    const r = last.result, L = LEVEL[r.level];
-    $("lvl").textContent = L.t; $("lvl").style.color = L.c;
-    $("gaugeFg").style.stroke = L.c;
-    if (r.level === "baseline"){
-      $("gaugeVal").textContent = `${b.days}/${BASELINE_DAYS}`; $("gaugeSub").textContent = "gün";
-      $("gaugeFg").style.strokeDashoffset = 263.9 * (1 - Math.min(b.days, BASELINE_DAYS) / BASELINE_DAYS);
-      $("lvlSub").textContent = `Son ölçüm: ${fmtDate(last.ts)} · ${BASELINE_DAYS} farklı günde ölçüm gerekiyor.`;
-      $("tip").textContent = "💡 Her sabah aynı saatte ölçersen normalin daha doğru çıkar.";
+    const a = A.byId.get(last.id), L = LEVEL[a.level];
+    $("lvl").textContent = L.t; $("lvl").style.color = L.c; $("gaugeFg").style.stroke = L.c;
+    if (a.level === "baseline"){
+      $("gaugeVal").textContent = `${Math.min(filledDays, 2)}/2`; $("gaugeSub").textContent = "gün";
+      $("gaugeFg").style.strokeDashoffset = 263.9 * (1 - Math.min(filledDays, 2) / 2);
+      $("lvlSub").textContent = `Son ölçüm: ${fmtDate(last.ts)} · İlk karşılaştırma için 2 farklı günde ölçüm gerekiyor.`;
     } else {
-      $("gaugeVal").textContent = fmtPct(r.deviationPct); $("gaugeSub").textContent = "normaline göre";
-      $("gaugeFg").style.strokeDashoffset = 263.9 * (1 - Math.min(Math.abs(r.deviationPct) / 10, 1));
-      $("lvlSub").textContent = `Son ölçüm: ${fmtDate(last.ts)}` + (r.early ? ` · erken tahmin (normalin ${b.days}/${BASELINE_DAYS} gün)` : "");
-      $("tip").textContent = "💡 " + (r.tip || "");
+      $("gaugeVal").textContent = fmtSigned(a.pct) + "%"; $("gaugeSub").textContent = `skor ${fmtSigned(a.P)}`;
+      $("gaugeFg").style.strokeDashoffset = 263.9 * (1 - clamp(a.P / 3, 0.04, 1));
+      $("lvlSub").textContent = `Son ölçüm: ${fmtDate(last.ts)}` + (a.early ? ` · erken tahmin (${a.refDays}/7 gün)` : "");
     }
+    const sl = stressLabel(a.stress);
+    $("pills").innerHTML = (sl ? `<span class="pill" style="color:${sl[1]}">Stres ${a.stress} · ${sl[0]}</span>` : `<span class="pill muted">Stres: check-in bekleniyor</span>`) +
+      a.factors.map(f => `<span class="pill">${esc(FACTORS[f].label)}</span>`).join("");
+    const tip = ensureTip(last, a, A, all);
+    const cause = tip.cause ? chooseCause(a, A.triggers) : null;
+    $("tip").innerHTML = "💡 " + esc(tip.text) + (cause ? `<div class="why">${esc(causeText(cause, A.triggers))}</div>` : "");
+    const tr = trendFor(last, A);
+    $("trend").textContent = tr ? tr.text : "";
+    $("ciOpenRow").style.display = !last.checkin && !$("ciCard").classList.contains("on") ? "flex" : "none";
+  } else {
+    $("lvl").textContent = "Henüz ölçüm yok"; $("lvl").style.color = ""; $("pills").innerHTML = ""; $("trend").textContent = "";
+    $("gaugeVal").textContent = "–"; $("gaugeSub").textContent = "normaline göre"; $("gaugeFg").style.strokeDashoffset = 263.9;
+    $("lvlSub").textContent = "Sabah uyanınca, aynı ışıkta, düz bakarak ölç.";
+    $("tip").textContent = "💡 İlk gün kişisel normalin öğreniliyor. 2. günden itibaren öneriler başlıyor.";
+    $("ciOpenRow").style.display = "none";
   }
-  // --- geçmiş
-  const filled = Math.min(b.days, BASELINE_DAYS);
-  $("baseProg").innerHTML = b.ready ? `<p class="small muted" style="margin:-6px 0 8px">Normalin hazır ✓ (ilk ${BASELINE_DAYS} günün ortalaması)</p>` :
-    `<p class="small muted" style="margin:-6px 0 0">Normalin öğreniliyor: ${filled}/${BASELINE_DAYS} gün</p>
-     <div class="progress">${Array.from({length:BASELINE_DAYS},(_,i)=>`<i class="${i<filled?"f":""}"></i>`).join("")}</div>`;
+  $("baseProg").innerHTML = filledDays >= 7 ? `<p class="small muted" style="margin:-6px 0 8px">Normalin hazır ✓ (${filledDays} gün ölçüm)</p>` :
+    `<p class="small muted" style="margin:-6px 0 0">Normalin öğreniliyor: ${filledDays}/7 gün (3. günden itibaren erken tahmin)</p>
+     <div class="progress">${Array.from({length:7},(_,i)=>`<i class="${i<filledDays?"f":""}"></i>`).join("")}</div>`;
+  renderTriggers(A);
   $("days").innerHTML = all.slice().reverse().map(r => {
-    const lv = r.result?.level || "baseline";
-    return `<div class="day ${lv}"><span class="small muted">${fmtDate(r.ts)}</span>
-      <b>${LEVEL[lv].t}</b><span class="small">${r.result?.deviationPct != null ? fmtPct(r.result.deviationPct) + (r.result.early ? " · erken" : "") : "referans ölçümü"}</span></div>`;
+    const a = A.byId.get(r.id), lv = a.level;
+    const tags = a.factors.map(f => FACTORS[f].label).join(", ");
+    return `<div class="day ${lv}"><span class="small muted">${fmtDate(r.ts)}</span><b>${LEVEL[lv].t}</b>
+      <span class="small">${a.P != null ? "skor " + fmtSigned(a.P) + (a.early ? " · erken" : "") : "referans ölçümü"}${a.stress != null ? " · stres " + a.stress : ""}</span>
+      ${tags ? `<div class="small muted">${esc(tags)}</div>` : ""}</div>`;
   }).join("") || `<p class="muted">Henüz kayıt yok.</p>`;
-  if ($("v-history").classList.contains("on")) drawChart(all);
-  // --- veriler
-  renderData(all, last);
+  if (currentView === "history"){ drawChartP(A); drawChartS(all, A); }
+  renderData(all, A, last);
 }
 
-function drawChart(all){
-  const c = $("chart"), g = c.getContext("2d"), dpr = devicePixelRatio;
-  const W = c.width = c.clientWidth * dpr, H = c.height = c.clientHeight * dpr;
-  g.clearRect(0,0,W,H);
-  const pts = all.filter(r => r.result?.deviationPct != null);
-  const lo = -6, hi = 12, y = v => H - 20*dpr - (v-lo)/(hi-lo)*(H-40*dpr), padL = 40*dpr;
-  const band = (a,b2,col) => { g.fillStyle = col; g.fillRect(padL, y(b2), W-padL, y(a)-y(b2)); };
-  band(lo,3,"#5be3b014"); band(3,6,"#ffd27a14"); band(6,hi,"#ff7a6b14");
-  g.fillStyle = "#93b5b2"; g.font = `${12*dpr}px Plus Jakarta Sans, sans-serif`; g.textAlign = "right";
-  for (const v of [-5,0,3,6,10]){ g.fillText((v>0?"+":"")+v+"%", padL-6*dpr, y(v)+4*dpr);
-    g.strokeStyle = "#1f4a55"; g.lineWidth = 1; g.beginPath(); g.moveTo(padL,y(v)); g.lineTo(W,y(v)); g.stroke(); }
-  if (!pts.length){ g.textAlign="center"; g.fillText("Normalin hazır olunca sapma grafiği burada çıkacak", (W+padL)/2, H/2); return; }
-  const x = i => padL + 14*dpr + (pts.length === 1 ? 0 : i/(pts.length-1)*(W-padL-28*dpr));
+function renderTriggers(A){
+  const max = 2.5;
+  $("trig").innerHTML = Object.entries(FACTORS).map(([f, info]) => {
+    const t = A.triggers[f];
+    if (t.status === "collecting"){
+      return `<div class="tr"><span>${info.label}</span><span class="small muted">veri toplanıyor · var: ${Math.min(t.n1,3)}/3, yok: ${Math.min(t.n2,3)}/3 gün</span><span class="st muted">…</span></div>`;
+    }
+    const w = clamp(Math.abs(t.effect) / max, 0, 1) * 50;
+    const col = t.status === "sig" ? "var(--coral)" : "#4d6f75";
+    const pos = t.effect >= 0 ? `left:50%;width:${w}%` : `left:${50 - w}%;width:${w}%`;
+    return `<div class="tr"><span>${info.label}</span>
+      <div><div class="bar"><i style="${pos};background:${col};border-radius:4px"></i><i style="left:50%;width:1px;background:var(--muted)"></i></div>
+      <div class="small muted">etki ${fmtSigned(t.effect, 2)} ± ${t.se} · ${t.n1} vs ${t.n2} gün</div></div>
+      <span class="st" style="color:${t.status === "sig" ? "var(--coral)" : "var(--muted)"}">${t.status === "sig" ? "✓ etkili" : "belirsiz"}</span></div>`;
+  }).join("");
+}
+
+function setupCanvas(c){
+  const dpr = devicePixelRatio, W = c.width = c.clientWidth * dpr, H = c.height = c.clientHeight * dpr;
+  const g = c.getContext("2d"); g.clearRect(0,0,W,H);
+  g.font = `${12*dpr}px "Plus Jakarta Sans", sans-serif`;
+  return { g, W, H, dpr };
+}
+function drawChartP(A){
+  const { g, W, H, dpr } = setupCanvas($("chartP"));
+  const firsts = A.firsts.filter(f => A.byId.get(f.id).P != null);
+  const lo = -2, hi = 4, padL = 34*dpr, padB = 22*dpr, padT = 10*dpr;
+  const y = v => padT + (hi - clamp(v, lo, hi)) / (hi - lo) * (H - padT - padB);
+  const band = (a, b, col) => { g.fillStyle = col; g.fillRect(padL, y(b), W - padL, y(a) - y(b)); };
+  band(lo, 1, "#5be3b014"); band(1, 2, "#ffd27a18"); band(2, hi, "#ff7a6b18");
+  g.fillStyle = "#93b5b2"; g.textAlign = "right";
+  for (const v of [-2, 0, 1, 2, 3, 4]){ g.fillText(String(v), padL - 6*dpr, y(v) + 4*dpr);
+    g.strokeStyle = "#1f4a55"; g.lineWidth = 1; g.beginPath(); g.moveTo(padL, y(v)); g.lineTo(W, y(v)); g.stroke(); }
+  if (!firsts.length){ g.textAlign = "center"; g.fillText("3. gün ölçümünden itibaren grafik başlar", (W + padL) / 2, H / 2); return; }
+  const x = i => padL + 16*dpr + (firsts.length === 1 ? 0 : i / (firsts.length - 1) * (W - padL - 32*dpr));
   g.strokeStyle = "#ecf6f4"; g.lineWidth = 2*dpr; g.beginPath();
-  pts.forEach((r,i) => { const v = Math.max(lo, Math.min(hi, r.result.deviationPct)); i ? g.lineTo(x(i),y(v)) : g.moveTo(x(i),y(v)); });
-  g.stroke();
-  pts.forEach((r,i) => { const v = Math.max(lo, Math.min(hi, r.result.deviationPct));
-    g.fillStyle = LEVEL[r.result.level].c; g.beginPath(); g.arc(x(i),y(v),5*dpr,0,7); g.fill(); });
+  firsts.forEach((r, i) => { const v = A.byId.get(r.id).P; i ? g.lineTo(x(i), y(v)) : g.moveTo(x(i), y(v)); }); g.stroke();
+  g.textAlign = "center";
+  const every = Math.ceil(firsts.length / Math.max(1, Math.floor((W - padL) / (44*dpr))));
+  firsts.forEach((r, i) => { const a = A.byId.get(r.id);
+    g.fillStyle = LEVEL[a.level].c; g.beginPath(); g.arc(x(i), y(a.P), 5*dpr, 0, 7); g.fill();
+    if (a.factors.includes("salt")){ g.strokeStyle = "#ecf6f4"; g.lineWidth = 1.5*dpr; g.beginPath(); g.arc(x(i), y(a.P), 9*dpr, 0, 7); g.stroke(); }
+    if (i % every === 0){ g.fillStyle = "#93b5b2"; const d = new Date(r.ts); g.fillText(d.getDate() + "/" + (d.getMonth()+1), x(i), H - 5*dpr); }
+  });
+}
+function drawChartS(all, A){
+  const { g, W, H, dpr } = setupCanvas($("chartS"));
+  const pts = all.filter(r => A.byId.get(r.id).stress != null);
+  const padL = 34*dpr, padB = 8*dpr, padT = 8*dpr, y = v => padT + (100 - v) / 100 * (H - padT - padB);
+  g.fillStyle = "#93b5b2"; g.textAlign = "right";
+  for (const v of [0, 50, 100]){ g.fillText(String(v), padL - 6*dpr, y(v) + 4*dpr);
+    g.strokeStyle = "#1f4a55"; g.lineWidth = 1; g.beginPath(); g.moveTo(padL, y(v)); g.lineTo(W, y(v)); g.stroke(); }
+  if (!pts.length){ g.textAlign = "center"; g.fillText("Check-in doldurdukça burada görünecek", (W + padL) / 2, H / 2); return; }
+  const bw = Math.min(28*dpr, (W - padL) / pts.length * 0.6);
+  pts.forEach((r, i) => { const s = A.byId.get(r.id).stress, cx = padL + (i + 0.5) * (W - padL) / pts.length;
+    g.fillStyle = stressLabel(s)[1]; g.fillRect(cx - bw/2, y(Math.max(s, 2)), bw, y(0) - y(Math.max(s, 2))); });
 }
 
-function renderData(all, last){
-  const q = last?.quality;
+function renderData(all, A, last){
+  const q = last?.quality, la = last ? A.byId.get(last.id) : null;
   $("qTable").innerHTML = !q ? `<tr><td class="muted">Henüz ölçüm yok</td></tr>` :
-    `<tr><th>Oran</th><th>Kaydedilen (medyan)</th><th>En düşük</th><th>En yüksek</th><th>Dalgalanma</th></tr>` +
+    `<tr><th>Oran</th><th>Kaydedilen (medyan)</th><th>En düşük</th><th>En yüksek</th><th>Dalgalanma</th><th>z</th></tr>` +
     METRICS.map(x => `<tr><td><span style="color:${x.color}">●</span> ${x.label}</td><td>${last.metrics[x.k].toFixed(4)}</td>
-      <td>${q[x.k].min.toFixed(4)}</td><td>${q[x.k].max.toFixed(4)}</td><td>±${q[x.k].cvPct}%</td></tr>`).join("") +
-    `<tr><td class="muted">Kare sayısı</td><td colspan="4">${last.conditions.validFrames} temiz / ${last.conditions.totalFrames} toplam · ışık ${last.conditions.brightness}/255</td></tr>`;
-  $("allTable").innerHTML = `<tr><th>Tarih</th><th>Yüz</th><th>Çene</th><th>Göz</th><th>Işık</th><th>Sapma</th><th>Sonuç</th></tr>` +
-    (all.slice().reverse().map(r => `<tr><td>${fmtDate(r.ts)}</td><td>${r.metrics.faceWidth.toFixed(3)}</td><td>${r.metrics.jawWidth.toFixed(3)}</td>
-      <td>${r.metrics.eyeOpen.toFixed(3)}</td><td>${esc(r.conditions?.brightness ?? "–")}</td><td>${fmtPct(r.result?.deviationPct)}</td>
-      <td>${LEVEL[r.result?.level || "baseline"].t}</td></tr>`).join("") || `<tr><td class="muted" colspan="7">Kayıt yok</td></tr>`);
+      <td>${q[x.k].min.toFixed(4)}</td><td>${q[x.k].max.toFixed(4)}</td><td>±${q[x.k].cvPct}%</td><td>${la.z ? fmtSigned(la.z[x.k], 2) : "–"}</td></tr>`).join("") +
+    `<tr><td class="muted">Kare sayısı</td><td colspan="5">${esc(last.conditions.validFrames)} temiz / ${esc(last.conditions.totalFrames ?? "–")} toplam · ışık ${esc(last.conditions.brightness)}/255</td></tr>`;
+  $("allTable").innerHTML = `<tr><th>Tarih</th><th>Yüz</th><th>Çene</th><th>Göz</th><th>Skor</th><th>Sonuç</th><th>Uyku</th><th>Stres</th><th>Etkenler</th></tr>` +
+    (all.slice().reverse().map(r => { const a = A.byId.get(r.id);
+      return `<tr><td>${fmtDate(r.ts)}</td><td>${r.metrics.faceWidth.toFixed(3)}</td><td>${r.metrics.jawWidth.toFixed(3)}</td><td>${r.metrics.eyeOpen.toFixed(3)}</td>
+      <td>${fmtSigned(a.P, 2)}</td><td>${LEVEL[a.level].t}</td><td>${r.checkin ? esc(r.checkin.sleepH) + " sa" : "–"}</td><td>${a.stress ?? "–"}</td>
+      <td style="text-align:left">${esc(a.factors.map(f => FACTORS[f].label).join(", ") || "–")}</td></tr>`; }).join("") || `<tr><td class="muted" colspan="9">Kayıt yok</td></tr>`);
   $("json").textContent = last ? JSON.stringify(last, null, 2) : "Kayıt yok";
 }
 
-// ================= Butonlar =================
 $("startBtn").onclick = async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video:{ width:640, height:480, facingMode:"user" } });
     video.srcObject = stream; await video.play();
-    $("hint").style.display = "none";
-    running = true; $("startBtn").style.display = "none";
-    setStatus("Tüm kutular yeşil olunca 'Ölç'e bas");
-    loop();
+    $("hint").style.display = "none"; running = true; $("startBtn").style.display = "none";
+    setStatus("Tüm kutular yeşil olunca 'Ölç'e bas"); loop();
   } catch (e) { setStatus("Kamera açılamadı: " + e.message); }
 };
 $("measureBtn").onclick = measure;
+const dataMsg = t => { $("dataMsg").textContent = t; setTimeout(() => { $("dataMsg").textContent = ""; }, 4000); };
 $("exportBtn").onclick = () => {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([JSON.stringify(loadAll(), null, 2)], { type:"application/json" }));
-  const code = (getConsent()?.code || "veriler").replace(/\s+/g, "-");
+  const code = demoMode ? "ornek" : (getConsent()?.code || "veriler").replace(/\s+/g, "-");
   a.download = `selfcare-${code}-${new Date().toISOString().slice(0,10)}.json`; a.click();
 };
 $("importBtn").onclick = () => $("importFile").click();
@@ -595,29 +955,34 @@ $("importFile").onchange = async e => {
     const data = JSON.parse(await f.text());
     if (!Array.isArray(data)) throw new Error("dosya formatı yanlış");
     const cur = loadAll(), ids = new Set(cur.map(r => r.id));
-    const merged = cur.concat(data.filter(r => r?.id && r?.metrics && r?.ts && !ids.has(r.id))).sort((a,b) => a.ts.localeCompare(b.ts));
-    saveAll(merged); renderAll(); alertInline("İçe aktarıldı ✓");
-  } catch (err) { alertInline("İçe aktarılamadı: " + err.message); }
+    const ok = r => r && typeof r.id === "string" && typeof r.ts === "string" && r.metrics && MKEYS.every(k => typeof r.metrics[k] === "number");
+    const merged = cur.concat(data.filter(r => ok(r) && !ids.has(r.id))).sort((a,b) => a.ts.localeCompare(b.ts));
+    saveAll(merged); renderAll(); dataMsg("İçe aktarıldı ✓");
+  } catch (err) { dataMsg("İçe aktarılamadı: " + err.message); }
   e.target.value = "";
 };
 let armed = false;
 $("clearBtn").onclick = () => {
   if (!armed){ armed = true; $("clearBtn").textContent = "Emin misin? Tekrar bas";
     setTimeout(() => { armed = false; $("clearBtn").textContent = "Verileri sil"; }, 4000); return; }
-  armed = false; saveAll([]); $("clearBtn").textContent = "Verileri sil"; renderAll(); alertInline("Tüm veriler silindi");
+  armed = false; saveAll([]); $("clearBtn").textContent = "Verileri sil"; renderAll(); dataMsg("Tüm veriler silindi");
 };
-function alertInline(t){ $("json").textContent = t; }
-addEventListener("resize", () => renderAll());
+function setDemo(on){
+  demoMode = on;
+  try { on ? sessionStorage.setItem("selfcare.demoMode", "1") : sessionStorage.removeItem("selfcare.demoMode"); } catch {}
+  if (on) saveAll(makeDemo());
+  closeCheckin(); renderAll(); scrollTo({ top: 0, behavior: "smooth" });
+}
+$("demoEnter").onclick = () => setDemo(true);
+$("demoExit").onclick = () => setDemo(false);
+let rz = 0; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(renderAll, 150); });
 
-// ================= Onay =================
-const CONSENT_KEY = "selfcare.consent.v1";
-function getConsent(){ try { return JSON.parse(localStorage.getItem(CONSENT_KEY)); } catch { return null; } }
 function showWho(){ const c = getConsent(); $("who").textContent = c?.code ? "· " + c.code : ""; }
 const cleanCode = s => s.trim().replace(/[^\p{L}\p{N} _-]/gu, "").slice(0, 20);
 function updateConsentBtn(){ $("consentBtn").disabled = !($("c1").checked && $("c2").checked && cleanCode($("pCode").value)); }
 for (const id of ["c1","c2","pCode"]) $(id).addEventListener("input", updateConsentBtn);
 $("consentBtn").onclick = async () => {
-  const rec = { code: cleanCode($("pCode").value), acceptedAt: new Date().toISOString(), version: 1 };
+  const rec = { code: cleanCode($("pCode").value), acceptedAt: new Date().toISOString(), version: 2 };
   try { localStorage.setItem(CONSENT_KEY, JSON.stringify(rec)); }
   catch { $("consentInfo").textContent = "Tarayıcın veri kaydetmeye izin vermiyor. Gizli sekmede olabilirsin, normal sekmeden aç."; return; }
   try { await navigator.storage?.persist?.(); } catch {}
@@ -626,22 +991,40 @@ $("consentBtn").onclick = async () => {
 $("showConsent").onclick = e => {
   e.preventDefault();
   const c = getConsent();
-  if (c){ $("pCode").value = c.code; $("c1").checked = $("c2").checked = true;
-    $("consentInfo").textContent = `Onay tarihi: ${fmtDate(c.acceptedAt)}`; }
+  if (c){ $("pCode").value = c.code; $("c1").checked = $("c2").checked = true; $("consentInfo").textContent = `Onay tarihi: ${fmtDate(c.acceptedAt)}`; }
   updateConsentBtn(); $("consent").classList.add("on");
 };
 if (!getConsent()) $("consent").classList.add("on");
 showWho();
 
-// ================= Başlat =================
+// ================= Ana ekrana ekle =================
+const ua = navigator.userAgent;
+const isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+const isAndroid = /Android/.test(ua);
+const isStandalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+if (isStandalone){
+  $("installBox").innerHTML = `<b class="t">✓ Ana ekrandan açtın</b><span>Harika, ölçümlerini hep bu ikondan yap.</span>`;
+} else {
+  if (isIOS) $("osAndroid").remove();
+  else if (isAndroid) $("osIos").remove();
+}
+let deferredInstall = null;
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredInstall = e; if ($("installBtn")) $("installBtn").style.display = "inline-block"; });
+if ($("installBtn")) $("installBtn").onclick = async () => {
+  if (!deferredInstall) return;
+  deferredInstall.prompt();
+  try { await deferredInstall.userChoice; } catch {}
+  deferredInstall = null; if ($("installBtn")) $("installBtn").style.display = "none";
+};
+addEventListener("appinstalled", () => { $("installBox").innerHTML = `<b class="t">✓ Ana ekrana eklendi</b><span>Bundan sonra uygulamayı ikondan aç.</span>`; });
+
 renderChips(checks(null, null)); renderMetrics(null); renderAll();
 try {
   const files = await FilesetResolver.forVisionTasks(WASM);
   const opts = d => ({ baseOptions:{ modelAssetPath: MODEL, delegate: d }, outputFaceBlendshapes: true, runningMode:"VIDEO", numFaces: 1 });
   try { landmarker = await FaceLandmarker.createFromOptions(files, opts("GPU")); }
   catch { landmarker = await FaceLandmarker.createFromOptions(files, opts("CPU")); }
-  setStatus("Hazır · 'Kamerayı aç'a bas");
-  $("startBtn").disabled = false;
+  setStatus("Hazır · 'Kamerayı aç'a bas"); $("startBtn").disabled = false;
 } catch (e) { setStatus("Model yüklenemedi (internet bağlantısını kontrol et): " + e.message); }
 }
 </script>
