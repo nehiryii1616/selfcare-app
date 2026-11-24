@@ -251,7 +251,7 @@
       <div class="card">
         <h2>Stres skoru</h2>
         <div class="chart s"><canvas id="chartS"></canvas></div>
-        <p class="muted small" style="margin:8px 0 0">Şimdilik check-in cevaplarından hesaplanıyor (0-100). Parmak ucu nabız ölçümü eklenince HRV ile güçlenecek.</p>
+        <p class="muted small" style="margin:8px 0 0">Check-in cevaplarından hesaplanıyor (0-100). Bu bir ölçüm değil, kendi beyanının özetidir.</p>
       </div>
       <div class="days" id="days"></div>
       <div class="row"><button class="btn" id="demoEnter">🧪 Örnek veriyle göster</button><span class="muted small">2 haftalık örnek kullanımla tüm analizleri gösterir. Senin verilerin etkilenmez.</span></div>
@@ -321,8 +321,6 @@ Etkili ✓  ⇔  n₁ ≥ 3,  n₂ ≥ 3  ve  etki &gt; 2·SH   (≈ %95 güven)
         <ul class="src small">
           <li><b>Yorgunluk yüzde "algılanıyor", ama objektif ölçümü zor.</b> İnsanlar uykusuz bırakılan kişilerin yüzlerini daha şiş gözlü ve sarkık göz kapaklı olarak değerlendirmiş. Ancak 181 kişilik bir çalışmada tek gecelik uykusuzluk, objektif olarak ölçülen göz açıklığı, göz altı koyuluğu ve cilt rengini değiştirmemiş. Bu yüzden yüz görünüşünü bir yorgunluk ölçüsü olarak sunmuyoruz. <span class="badge b-wip">sınırlı</span><br>
             <a href="https://pubmed.ncbi.nlm.nih.gov/23997369/">Sundelin ve ark., Sleep 2013: algılanan yorgunluk</a> · <a href="https://research-portal.st-andrews.ac.uk/en/publications/the-effect-of-sleep-deprivation-on-objective-and-subjective-measu/">Holding ve ark., J Sleep Res 2019: objektif ölçümlerde etki bulunamadı (n=181)</a></li>
-          <li><b>Parmak ucu kamera ölçümü (planlanan stres modülü).</b> Telefon kamerasıyla parmak ucundan ölçülen nabız EKG ile çok yüksek uyum gösteriyor, yüzden ölçüm ise daha az doğru. <span class="badge b-ok">kanıtlı</span><br>
-            <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5368348/">Yan ve ark., JMIR mHealth 2017: fingertip vs facial PPG</a></li>
           <li><b>Tuzun yüz oranlarına etkisi.</b> Tuzlu beslenmenin ertesi sabah yüz oranlarında ölçülebilir bir değişim yaratıp yaratmadığını doğrudan test eden bir çalışma bulamadık. Pilot deneyimiz bunu test ediyor. <span class="badge b-wip">test ediliyor</span></li>
           <li><b>Yüz noktaları:</b> Google MediaPipe Face Landmarker (468 nokta, cihaz üzerinde çalışır).</li>
         </ul>
